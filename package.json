@@ -1,0 +1,20 @@
+{
+  "name": "weatheringwithme",
+  "version": "1.0.0",
+  "description": "CSCI2720 Spring 2022 Group 34\\",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TTTANGCUHK/WeatheringWithMe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TTTANGCUHK/WeatheringWithMe/issues"
+  },
+  "homepage": "https://github.com/TTTANGCUHK/WeatheringWithMe#readme"
+}
