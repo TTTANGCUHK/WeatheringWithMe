@@ -3,7 +3,7 @@ let Schema = mongoose.Schema
 
 let userFavLocSchema = new Schema({
         locName: {type: String, required: true},
-        favLoc: {type: [{lid: Number}], required: true}
+        favLoc: {type: [{lid: Schema.Types.ObjectId, ref: 'locModel'}], required: true}
     },
     {
         timestamp: true

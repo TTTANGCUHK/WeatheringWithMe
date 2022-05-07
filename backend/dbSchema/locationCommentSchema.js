@@ -2,7 +2,7 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let locCmSchema = new Schema({
-        locId: {type: Number, required: true},
+        locId: {type: Schema.Types.ObjectId, required: true, ref: 'locModel'},
         comments: {type: [{
                 body: String,
                 createTime: Date,
