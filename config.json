@@ -1,3 +1,3 @@
 {
-  "mongoURI": "URI Here"
+  "mongoURI": "mongodb+srv://WebApp:CSCI2720@cluster0.mvneg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }
