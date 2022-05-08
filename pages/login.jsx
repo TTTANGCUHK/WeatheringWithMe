@@ -18,7 +18,7 @@ class Login extends React.Component {
             <input className="w-full py-2 border-2 rounded px-2 mb-4" id="password" type="password" required />
 
             <button className="bg-gradient-to-b from-cyan-500 to-indigo-500 hover:from-cyan-600 hover:to-indigo-600 text-white font-bold text-md mt-2 py-2 px-4 rounded float-right" type="submit">Login</button>
-            <button className="bg-gradient-to-b from-cyan-500 to-indigo-500 hover:from-cyan-600 hover:to-indigo-600 text-white font-bold text-md mt-2 py-2 px-4 mr-3 rounded float-right" type="button">Sign in</button>
+            <button className="bg-gradient-to-b from-cyan-500 to-indigo-500 hover:from-cyan-600 hover:to-indigo-600 text-white font-bold text-md mt-2 py-2 px-4 mr-3 rounded float-right" type="button">Sign up</button>
         </form>
       </div>
       </div>
