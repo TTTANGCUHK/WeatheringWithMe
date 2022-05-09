@@ -14,7 +14,6 @@ export default async function handler(req, res) {
   connectToMongoDB()
   const db = mongoose.connection
   const Location = locModel
-  console.log(req.body.action)
   if (req.body.action === 'add') {
     let payload = JSON.parse(req.body.payload)
     let locationName = payload.locationName
