@@ -12,16 +12,16 @@ const signupPage = () => {
     });
 
     function checkPassword({ data }) {
-        let uRe = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
-        let pwRe = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+        let uRe = /^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
+        let pwRe = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,20}$/
 
         if (!uRe.test(data.username)) {
-            alert("Username length must be between 8-20 characters.")
+            alert("Username length must be between 4-20 characters.")
             return false
         }
 
         if (!pwRe.test(data.password)) {
-            alert("Password must contain at least 1 letter and 1 number with minimum 8 characters.")
+            alert("Password must contain at least 1 letter and 1 number between 4-20 characters.")
             return false
         }
 
