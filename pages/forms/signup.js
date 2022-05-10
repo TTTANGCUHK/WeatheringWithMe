@@ -3,6 +3,7 @@ import RStar from '../../utils/required'
 import { useState } from "react";
 import CRandomStr from "crypto-random-string"
 import Crypto from "crypto-js"
+import Router from "next/router";
 
 
 const signupPage = () => {
@@ -59,24 +60,22 @@ const signupPage = () => {
                 password: mPassword
             }
 
-
-            const JSONdata = JSON.stringify(postData)
-            const test = "username=" + encodeURIComponent(postData.username)
-                + "&salt=" + encodeURIComponent(postData.salt)
-                + "&password=" + encodeURIComponent(postData.password);
-
-
             const postTo = "../api/createUser"
             const opts = {
                 method: 'POST',
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 mode: 'cors',
-                body: test
+                body: new URLSearchParams(postData)
             }
             alert(opts.body)
             const res = await fetch(postTo, opts)
             const result = await res.json()
-            alert('RESULT: ' + result.data)
+            if (result.status === "200") {
+                alert("You have created your account successfully!")
+                if (typeof window !== 'undefined') {
+                    await Router.push('/forms/login')
+                }
+            }
         }
     }
 
