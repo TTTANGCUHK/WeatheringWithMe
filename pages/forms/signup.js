@@ -32,7 +32,6 @@ const signupPage = () => {
             return false
         }
 
-        alert("OK")
         return true
     }
 
@@ -67,7 +66,6 @@ const signupPage = () => {
                 mode: 'cors',
                 body: new URLSearchParams(postData)
             }
-            alert(opts.body)
             const res = await fetch(postTo, opts)
             const result = await res.json()
             if (result.status === "200") {
@@ -75,6 +73,8 @@ const signupPage = () => {
                 if (typeof window !== 'undefined') {
                     await Router.push('/forms/login')
                 }
+            } else if (result.status === "403") {
+                alert("Account already exist!")
             }
         }
     }

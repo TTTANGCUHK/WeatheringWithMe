@@ -25,6 +25,12 @@ export default async function handler(req, res) {
     password: password,
     isAdmin: false
   })
+  User.findOne({username: username}, (err, user) => {
+      if (user.username === username) {
+          return res.status(403).json({ status: '403', msg: 'Username exist' })
+      }
+  })
+
   newUser.save((e, user) => {
     if (e) return res.status(400).json({ status: 'error', msg: e })
     return res.status(200).json({ status: '200', msg: 'User created' })
