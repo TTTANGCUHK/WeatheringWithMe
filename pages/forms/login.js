@@ -25,7 +25,7 @@ const loginPage = () => {
             mode: 'cors',
             body: new URLSearchParams(data)
         }
-        alert(opts.body)
+
         const res = await fetch(postTo, opts)
         const result = await res.json()
         if (result.status === "200") {
