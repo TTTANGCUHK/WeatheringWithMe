@@ -1,6 +1,7 @@
 import Container from '../form'
 import RStar from '../../utils/required'
 import {useState} from "react";
+import Router from "next/router";
 
 const loginPage = () => {
 
@@ -17,7 +18,7 @@ const loginPage = () => {
             password: event.target.password.value
         }
 
-        const postTo = "../api/login"
+        const postTo = "../api/loginUser"
         const opts = {
             method: 'POST',
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -25,11 +26,20 @@ const loginPage = () => {
             body: new URLSearchParams(data)
         }
         alert(opts.body)
-        // const res = await fetch(postTo, opts)
-        // const result = await res.json()
-        // if (result.status === 200) {
-        //     alert("You login your account successfully!")
-        // }
+        const res = await fetch(postTo, opts)
+        const result = await res.json()
+        if (result.status === "200") {
+            alert("You login your account successfully!")
+            if (result.msg === "Admin Login") {
+                if (typeof window !== 'undefined') {
+                    await Router.push('/admin')
+                }
+            } else if (result.msg === "User Login") {
+                //TODO: redirect to main page
+            }
+        } else if (result.status === "403" || result.status === "404") {
+            alert("Wrong username or password!")
+        }
     }
 
     return (
