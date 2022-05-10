@@ -254,7 +254,9 @@ class AdminHome extends React.Component {
                     <div className="border rounded-b p-2 font-overpass">
                         <form>
                         <label className="block text-sm font-bold" name="name">Username</label>
-                        <input className="w-full py-1 border rounded px-1" id="name" type="text" />
+                        <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
+                        <label className="block text-sm font-bold" name="password">Password</label>
+                        <input className="w-full py-1 border rounded px-1" id="password" type="text" />
 
                         <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">CREATE</button>
                         </form>
@@ -269,7 +271,9 @@ class AdminHome extends React.Component {
                     <div className="border rounded-b p-2 font-overpass">
                         <form>
                         <label className="block text-sm font-bold" name="name">Username</label>
-                        <input className="w-full py-1 border rounded px-1" id="name" type="text" />
+                        <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
+                        <label className="block text-sm font-bold" name="password">Password</label>
+                        <input className="w-full py-1 border rounded px-1" id="password" type="text" />
 
 
                         <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">UPDATE</button>
@@ -285,7 +289,7 @@ class AdminHome extends React.Component {
                         <label className="block text-sm font-bold" name="name">Username</label>
                         <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
-                        <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2" type="submit">RETRIEVE</button>
+                        <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2 mb-5" type="submit">RETRIEVE</button>
                         </form>
                     </div>
                     </div>
