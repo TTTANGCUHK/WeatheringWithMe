@@ -25,6 +25,7 @@
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",
+    "crypto-random-string": "^4.0.0",
     "mongoose": "^6.3.2",
     "next": "^12.1.6",
     "react": "^18.1.0",
