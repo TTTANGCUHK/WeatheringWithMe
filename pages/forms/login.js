@@ -18,7 +18,7 @@ const loginPage = () => {
             password: event.target.password.value
         }
 
-        const postTo = "../api/loginUser"
+        const postTo = "../api/user/loginUser"
         const opts = {
             method: 'POST',
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -37,6 +37,11 @@ const loginPage = () => {
             } else if (result.msg === "User Login") {
                 //TODO: redirect to main page
             }
+
+            // else if (result.msg === "User updated") {
+            //     alert("PW updated")
+            // }
+
         } else if (result.status === "403" || result.status === "404") {
             alert("Wrong username or password!")
         }

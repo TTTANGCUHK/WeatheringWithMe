@@ -1,8 +1,6 @@
 import Container from '../form'
 import RStar from '../../utils/required'
 import { useState } from "react";
-import CRandomStr from "crypto-random-string"
-import Crypto from "crypto-js"
 import Router from "next/router";
 
 
@@ -35,14 +33,6 @@ const signupPage = () => {
         return true
     }
 
-    function generateSalt() {
-        return CRandomStr({ length: 10, type: 'alphanumeric' });
-    }
-
-    function cryptoPassword(password, salt) {
-        return Crypto.SHA256(password + salt).toString()
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault()
         const data = {
@@ -51,15 +41,12 @@ const signupPage = () => {
             confirm_password: event.target.confirm_password.value
         }
         if (checkPassword({ data })) {
-            const mSalt = generateSalt()
-            const mPassword = cryptoPassword(data.password, mSalt)
             const postData = {
                 username: data.username,
-                salt: mSalt,
-                password: mPassword
+                password: data.password
             }
 
-            const postTo = "../api/createUser"
+            const postTo = "../api/user/createUser"
             const opts = {
                 method: 'POST',
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },

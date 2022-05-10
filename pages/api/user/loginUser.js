@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import connectToMongoDB from '../../backend/mongo/mongoDB'
-import userModel from '../../backend/dbSchema/userSchema'
-import APICHECK from './APICHECK'
+import connectToMongoDB from '../../../backend/mongo/mongoDB'
+import userModel from '../../../backend/dbSchema/userSchema'
+import APICHECK from '../APICHECK'
 import Crypto from "crypto-js"
 
 export default async function handler(req, res) {
