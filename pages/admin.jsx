@@ -3,44 +3,41 @@ import { Collapse } from "react-collapse";
 
 
 class AdminHome extends React.Component {
-  
-  
+    constructor(props) {
+        super(props);
+        this.ReqElement = React.createRef();
+        this.LocElement = React.createRef();
+        this.UserElement = React.createRef();
+    }
+    handleClickR = () => {
+        this.ReqElement.current.handleMenuClick();
+    };
+    handleClickL = () => {
+        this.LocElement.current.handleMenuClick();
+    };
+    handleClickU = () => {
+        this.UserElement.current.handleMenuClick();
+    };
+
   render() {
     return (
-    
 
-        <div className="w-screen h-full min-h-screen bg-fixed" style={{backgroundImage: "url('../ss-scaled-2048x1152.jpg')"}}>
-        
-        
+        <div className="w-screen h-full min-h-screen bg-fixed bg-[url('../public/ss-scaled-2048x1152.jpg')]">                
         <div className="flex flex-row h-full min-h-screen opacity-90">
         <div className="flex-none basis-3/12 bg-white rounded m-5 h-fit sticky top-0">
             <div className="grid grid-rows-4 gap-3 m-3 h-full font-overpass font-bold text-md">
-            <div className="rounded bg-gradient-to-r from-indigo-500 to-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5">
-                <a className="rounded w-full bg-white p-2 text-slate-600 h-full text-center" type="button" href="#req">Request Updated Data</a>
-            </div>
+       
+            <div onClick={this.handleClickR}><Menu name="Request Updated Data" anchor="#req"/></div>
+            <div onClick={this.handleClickL}><Menu name="Location Data" anchor="#loc"/></div>
+            <div onClick={this.handleClickU}><Menu name="User Data" anchor="#user"/></div>
+            <div><Menu name="Log Out" anchor="#"/></div>
 
-            <div className="rounded bg-gradient-to-r from-indigo-500 to-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5">
-                <a className="rounded w-full bg-white p-2 text-slate-600 h-full text-center" type="button" href="#loc">Location Data</a>
-            </div>
-
-            <div className="rounded bg-gradient-to-r from-indigo-500 to-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5">
-                <a className="rounded w-full bg-white p-2 text-slate-600 h-full text-center" type="button" href="#user">User Data</a>
-            </div>
-
-            <div className="rounded bg-gradient-to-r from-indigo-500 to-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5">
-                <a className="rounded w-full bg-white p-2 text-slate-600 h-full text-center" type="button">Log Out</a>
-            </div>
-
-            </div>
-
-
-            
+            </div>            
         </div>
         <div className="flex-auto bg-white rounded mr-5 mt-5 mb-5">
-            <Request/>
-            <LocationData/>
-            <UserData/>
-        
+            <Request ref={this.ReqElement}/>
+            <LocationData ref={this.LocElement}/>
+            <UserData ref={this.UserElement}/>
         </div>
 
    
@@ -53,7 +50,17 @@ class AdminHome extends React.Component {
     }
     }
 
-    class Request extends React.Component {
+    class Menu extends React.Component {
+        render(){
+            return(
+                <div className="rounded bg-gradient-to-r from-indigo-500 to-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5">
+                <a className="rounded w-full bg-white p-2 text-slate-600 h-full text-center" type="button" href={this.props.anchor}>{this.props.name}</a>
+                </div>
+            );
+        }
+    }
+
+    class CollapseSession extends React.Component {
         state = {
             collapseOpen: false,
           };
@@ -63,46 +70,66 @@ class AdminHome extends React.Component {
               collapseOpen: !prevState.collapseOpen,
             }));
         };
-        render(){
+        onMenu = () => {
+            this.setState({collapseOpen: true});
+        };
+        render() {
             return(
-                <div className="m-3" id="req">
+                <div className="m-3" id={this.props.session}>
                     <div className="rounded bg-gradient-to-r to-indigo-500 from-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5 opacity-80 font-overpass text-xl font-bold">
-                    <div className="rounded w-full bg-white p-2 h-full opacity-80 text-center" onClick={this.onCollapse}>Request Updated Data</div>
+                    <div className="rounded w-full bg-white p-2 h-full opacity-80 text-center" onClick={this.onCollapse}>{this.props.name}</div>
                     </div>
 
                     <Collapse isOpened={this.state.collapseOpen}>
-                    <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
-                    <button className="bg-sky-600 hover:bg-sky-400 rounded p-1 font-overpass text-white px-2" type="button">Reload Data</button>
-                    <div className="text-xs font-overpass mt-0.5">Last updated: </div>
-                    </div>
+                    {this.props.session == "req"
+                    ? <ReqCollapse/>
+                    : <>
+                    {this.props.session == "loc"
+                    ? <LocCollapse/>
+                    : <UserCollapse/>
+                    }
+                    </>
+                    }
                     </Collapse>
 
 
                     
                 </div>
             );
+
         }
     }
 
-    class LocationData extends React.Component {
-        state = {
-            collapseOpen: false,
-          };
+    class ReqCollapse extends React.Component {
+        render() {
+            return (
+                <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
+                    <button className="bg-sky-600 hover:bg-sky-400 rounded p-1 font-overpass text-white px-2" type="button">Reload Data</button>
+                    <div className="text-xs font-overpass mt-0.5">Last updated: </div>
+                </div>
+            );
+        }
+    }
 
-        onCollapse = () => {
-            this.setState(prevState => ({
-              collapseOpen: !prevState.collapseOpen,
-            }));
-        };
+    class Request extends React.Component {
+        constructor(props) {
+            super(props);
+            this.ReqElement = React.createRef();
+        }
+        handleMenuClick = () => {
+            this.ReqElement.current.onMenu();
+        }
         render(){
             return(
-                <div className="m-3" id="loc">
-                    <div className="rounded bg-gradient-to-r to-indigo-500 from-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5 opacity-80 font-overpass text-xl font-bold">
-                    <div className="rounded w-full bg-white p-2 h-full opacity-80 text-center" onClick={this.onCollapse}>Location Data</div>
-                    </div>
+                <CollapseSession ref={this.ReqElement} name="Request Updated Data" session="req"/>
+            );
+        }
+    }
 
-                    <Collapse isOpened={this.state.collapseOpen}>
-                    <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
+    class LocCollapse extends React.Component {
+        render() {
+            return (
+                <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
 
                     <div className="columns-4 mb-3 mx-1 mt-1">                        
 
@@ -195,32 +222,29 @@ class AdminHome extends React.Component {
 
                     </table>
                     </div>
-                    </Collapse>
-                </div>
             );
         }
     }
 
-    class UserData extends React.Component {
-        state = {
-            collapseOpen: false,
-          };
-
-        onCollapse = () => {
-            this.setState(prevState => ({
-              collapseOpen: !prevState.collapseOpen,
-            }));
-        };
-       
+    class LocationData extends React.Component {
+        constructor(props) {
+            super(props);
+            this.ReqElement = React.createRef();
+        }
+        handleMenuClick = () => {
+            this.ReqElement.current.onMenu();
+        }
         render(){
             return(
-                <div className="m-3" id="user">
-                    <div className="rounded bg-gradient-to-r to-indigo-500 from-cyan-300 hover:from-purple-500 hover:to-rose-500 w-full p-0.5 opacity-80 font-overpass text-xl font-bold">
-                    <div className="rounded w-full bg-white p-2 h-full opacity-80 text-center" onClick={this.onCollapse}>User Data</div>
-                    </div>
+                <CollapseSession ref={this.ReqElement} name="Location Data" session="loc"/>
+            );
+        }
+    }
 
-                    <Collapse isOpened= {this.state.collapseOpen}>
-                    <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
+    class UserCollapse extends React.Component {
+        render() {
+            return (
+                <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
 
                     <div className="columns-4 mb-3 mx-1 mt-1">  
 
@@ -300,8 +324,21 @@ class AdminHome extends React.Component {
 
                     </table>
                     </div>
-                    </Collapse>
-                </div>
+            );
+        }
+    }
+
+    class UserData extends React.Component {
+        constructor(props) {
+            super(props);
+            this.ReqElement = React.createRef();
+        }
+        handleMenuClick = () => {
+            this.ReqElement.current.onMenu();
+        }
+        render(){
+            return(
+                <CollapseSession ref={this.ReqElement} name="User Data" session="user"/>
             );
         }
     }
