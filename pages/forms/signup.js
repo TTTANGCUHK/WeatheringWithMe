@@ -58,16 +58,21 @@ const signupPage = () => {
                 salt: mSalt,
                 password: mPassword
             }
+
+
             const JSONdata = JSON.stringify(postData)
+            const test = "username=" + encodeURIComponent(postData.username)
+                + "&salt=" + encodeURIComponent(postData.salt)
+                + "&password=" + encodeURIComponent(postData.password);
+
+
             const postTo = "../api/createUser"
             const opts = {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSONdata
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: test
             }
-            alert(JSONdata)
+            alert(opts.body)
             const res = await fetch(postTo, opts)
             const result = await res.json()
             alert('RESULT: ' + result.data)
