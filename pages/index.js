@@ -90,10 +90,11 @@ const hardcodedData = [{
 
 function HomePage() {
   const [weatherData, setWeatherData] = useState([])
+  const [order, setOrder] = useState(true) // true: ascending, false: descending
 
   useEffect(() => {
     // Fetch weather data from API to weatherData state
-    setWeatherData(hardcodedData)
+    setWeatherData(hardcodedData) // Meaning is : weatherData = hardcodedData
   }, [])
 
   useEffect(() => {
@@ -118,6 +119,16 @@ function HomePage() {
   //     Weather Data: {JSON.stringify(weatherData)}
   //   </div>
   // </div>
+// onclick function
+  function sortByLatitude() {
+    // When Latitude title is clicked
+    if (order == true){
+      setOrder(false)
+    } else 
+    if (order == false){
+      setOrder(true)
+    }
+  }
 
   if (weatherData.length == 0) return <div></div>
 
@@ -129,13 +140,13 @@ function HomePage() {
     <thead>
       <tr>
         <th>Location</th>
-        <th>Latitude</th>
+        <th onClick={sortByLatitude}>Latitude</th>
         <th>Longitude</th>
       </tr>
     </thead>
     <tbody>
       {
-        weatherData.map((location, index) => (
+        weatherData.sort(function(a, b){if (order) {return a.location.lat - b.location.lat} else {return b.location.lat - a.location.lat}}).map((location, index) => (
           <tr key={index}>
             <td> <Link href={`/location/${weatherData[index].location.name.replace(/\s/g, '')}`}>{weatherData[index].location.name}</Link></td>
             <td>{weatherData[index].location.lat}</td>
