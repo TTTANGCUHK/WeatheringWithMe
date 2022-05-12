@@ -4,6 +4,9 @@ import Table from '../component/Table.js';
 import Map from '../component/Map.js';
 import fetchWeatherAPI from '../backend/dataFetch/fetchAPI'
 
+import { useSession } from 'next-auth/react'
+import Router from "next/router";
+
 // const hardcodedData = [{
 //   "location": {
 //     "name": "Hong Kong",
@@ -111,6 +114,38 @@ const hardcodedData = [
 ]
 
 function HomePage() {
+
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      Router.push('/form')
+    },
+  })
+
+  if (status === "loading") {
+    return <h2>Loading...</h2>
+  }
+
+  // const [loading, setLoading] = useState(true)
+  //
+  // useEffect(() => {
+  //   const securePage = async () => {
+  //     const session = await getSession()
+  //     if (!session) {
+  //       if (typeof window !== 'undefined') {
+  //         await Router.push('/form')
+  //       }
+  //     } else {
+  //       setLoading(false)
+  //     }
+  //   }
+  //   securePage()
+  // }, [])
+
+  // if (loading) {
+  //   return <h2>Loading...</h2>
+  // }
+
   const [locations, setLocations] = useState([])
 
   useEffect(() => {
@@ -123,7 +158,7 @@ function HomePage() {
     console.log(locations)
   }, [locations])
 
-  if (locations.length == 0) return <div></div>
+  if (locations.length === 0) return <div></div>
 
   // HTML + JS section
   return (

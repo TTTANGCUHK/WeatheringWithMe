@@ -2,6 +2,7 @@ import Container from '../form'
 import RStar from '../../utils/required'
 import {useState} from "react";
 import Router from "next/router";
+import { signIn } from "next-auth/react";
 
 const loginPage = () => {
 
@@ -17,36 +18,37 @@ const loginPage = () => {
             username: event.target.username.value.trim(),
             password: event.target.password.value
         }
+        await signIn("credentials", {username: data.username, password: data.password, callbackUrl: '/'})
 
-        const postTo = "../api/user/loginUser"
-        const opts = {
-            method: 'POST',
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            mode: 'cors',
-            body: new URLSearchParams(data)
-        }
-
-        const res = await fetch(postTo, opts)
-        const result = await res.json()
-        if (result.status === "200") {
-            alert("You login your account successfully!")
-            if (result.msg === "Admin Login") {
-                if (typeof window !== 'undefined') {
-                    await Router.push('/admin')
-                }
-            } else if (result.msg === "User Login") {
-                if (typeof window !== 'undefined') {
-                    await Router.push('/')
-                }
-            }
-
-            // else if (result.msg === "User updated") {
-            //     alert("PW updated")
-            // }
-
-        } else if (result.status === "403" || result.status === "404") {
-            alert("Wrong username or password!")
-        }
+        // const postTo = "../api/user/loginUser"
+        // const opts = {
+        //     method: 'POST',
+        //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        //     mode: 'cors',
+        //     body: new URLSearchParams(data)
+        // }
+        //
+        // const res = await fetch(postTo, opts)
+        // const result = await res.json()
+        // if (result.status === "200") {
+        //     alert("You login your account successfully!")
+        //     if (result.msg === "Admin Login") {
+        //         if (typeof window !== 'undefined') {
+        //             await Router.push('/admin')
+        //         }
+        //     } else if (result.msg === "User Login") {
+        //         if (typeof window !== 'undefined') {
+        //             await Router.push('/')
+        //         }
+        //     }
+        //
+        //     // else if (result.msg === "User updated") {
+        //     //     alert("PW updated")
+        //     // }
+        //
+        // } else if (result.status === "403" || result.status === "404") {
+        //     alert("Wrong username or password!")
+        // }
     }
 
     return (

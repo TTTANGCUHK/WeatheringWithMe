@@ -2,12 +2,9 @@ import mongoose from 'mongoose'
 import connectToMongoDB from '../../../backend/mongo/mongoDB'
 import userModel from '../../../backend/dbSchema/userSchema'
 import APICHECK from '../APICHECK'
-import Crypto from "crypto-js"
+import APICRYPTO from "../APICRYPTO"
 
 export default async function handler(req, res) {
-    function cryptoPassword(password, salt) {
-        return Crypto.SHA256(password + salt).toString()
-    }
 
     let err
     if (err = APICHECK.POST_only(req), err)
@@ -31,7 +28,7 @@ export default async function handler(req, res) {
             return res.status(404).json({ status: '404', msg: 'Username does not exist' })
         }
 
-        if (cryptoPassword(password, user.salt) !== user.password) {
+        if (APICRYPTO.CRYPTO_PW(password, user.salt) !== user.password) {
             return res.status(403).json({ status: '403', msg: 'Wrong password' })
         } else {
             if (user.isAdmin) {
