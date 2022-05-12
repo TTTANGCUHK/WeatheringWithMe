@@ -7,8 +7,14 @@ import userModel from "../../../backend/dbSchema/userSchema";
 import APICRYPTO from "../APICRYPTO"
 
 export default NextAuth({
+
+    session: {
+        jwt: true
+    },
+
     providers: [
         CredentialProvider({
+            id: "credentials",
             name: "credentials",
             credentials: {
                 username: {label: "Username", type: "text", placeholder: "username"},
@@ -41,6 +47,7 @@ export default NextAuth({
                         } else {
                             console.log("USER")
                             return user
+                            //             await Router.push('/')
                             // return res.status(200).json({ status: '200', msg: 'User Login' })
                         }
                     }
@@ -54,6 +61,20 @@ export default NextAuth({
 
     pages: {
         signIn: '/form/login',
+    },
+
+    callbacks: {
+        async session({ session, token}) {
+            session.accessToken = token.accessToken
+            return session
+        },
+        async jwt({token, user}) {
+            if (user) {
+                token.accessToken = user.access_token
+            }
+
+            return token
+        }
     }
 })
 

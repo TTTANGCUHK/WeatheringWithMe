@@ -18,8 +18,12 @@ const loginPage = () => {
             username: event.target.username.value.trim(),
             password: event.target.password.value
         }
-        await signIn("credentials", {username: data.username, password: data.password, callbackUrl: '/'})
-
+        const result = await signIn("credentials", {redirect: false, username: data.username, password: data.password})
+        if (result?.ok)
+            await Router.push('/')
+        else {
+            alert("NOT OK")
+        }
         // const postTo = "../api/user/loginUser"
         // const opts = {
         //     method: 'POST',
