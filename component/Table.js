@@ -35,6 +35,7 @@ function Table({locations}) {
   // HTML + JS section
   return (
     <>
+    <br />
     <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">Select</InputLabel>
       <Select
@@ -71,9 +72,9 @@ function Table({locations}) {
         locations
           .sort(function(a, b){
             if (order) {
-              return a.locationData.latitude - b.locationData.latitude
+              return a.locData.latitude - b.locData.latitude
             } else {
-              return b.locationData.latitude - a.locationData.latitude
+              return b.locData.latitude - a.locData.latitude
             }
           })
           .filter(function(location) {
@@ -81,20 +82,20 @@ function Table({locations}) {
               return location
             } else {
               if (option === "Location"){
-                return location.locationName.toLowerCase().includes(input.toLowerCase())}
+                return location.locData.name.toLowerCase().includes(input.toLowerCase())}
               else if (option === "Latitude"){
-                return location.locationData.latitude.toString().includes(input)
+                return location.locData.latitude.toString().includes(input)
               }
               else if (option === "Longitude"){
-                return location.locationData.longitude.toString().includes(input)
+                return location.locData.longitude.toString().includes(input)
               }
             }
           })
           .map((location, index) => (
-          <tr key={location.lid}>
-            <td> <Link href={`/location/${location.lid}`}>{location.locationName}</Link></td>
-            <td>{location.locationData.latitude}</td>
-            <td>{location.locationData.longitude}</td>
+          <tr key={location._id}>
+            <td> <Link href={`/location/${location._id}`}>{location.locData.name}</Link></td>
+            <td>{location.locData.latitude}</td>
+            <td>{location.locData.longitude}</td>
           </tr>
         ))
       }
