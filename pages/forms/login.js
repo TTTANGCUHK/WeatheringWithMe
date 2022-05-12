@@ -35,7 +35,9 @@ const loginPage = () => {
                     await Router.push('/admin')
                 }
             } else if (result.msg === "User Login") {
-                //TODO: redirect to main page
+                if (typeof window !== 'undefined') {
+                    await Router.push('/')
+                }
             }
 
             // else if (result.msg === "User updated") {

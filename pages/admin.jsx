@@ -81,10 +81,10 @@ class AdminHome extends React.Component {
                     </div>
 
                     <Collapse isOpened={this.state.collapseOpen}>
-                    {this.props.session == "req"
+                    {this.props.session === "req"
                     ? <ReqCollapse/>
                     : <>
-                    {this.props.session == "loc"
+                    {this.props.session === "loc"
                     ? <LocCollapse/>
                     : <UserCollapse/>
                     }
@@ -242,6 +242,93 @@ class AdminHome extends React.Component {
     }
 
     class UserCollapse extends React.Component {
+
+        handleCreate = async (event) => {
+            event.preventDefault()
+            const data = {
+                username: event.target.name.value.trim(),
+                password: event.target.password.value
+            }
+            const postTo = "../api/user/createUser"
+            const opts = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                mode: 'cors',
+                body: new URLSearchParams(data)
+            }
+            const res = await fetch(postTo, opts)
+            const result = await res.json()
+            if (result.status === "200") {
+                alert("You have created an account successfully!")
+            } else if (result.status === "403") {
+                alert("Account already exist!")
+            }
+        }
+
+        handleUpdate = async (event) => {
+            event.preventDefault()
+            const data = {
+                username: event.target.name.value.trim(),
+                password: event.target.password.value
+            }
+            const postTo = "../api/user/updateUser"
+            const opts = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                mode: 'cors',
+                body: new URLSearchParams(data)
+            }
+            const res = await fetch(postTo, opts)
+            const result = await res.json()
+            if (result.status === "200") {
+                alert("You have updated an account successfully!")
+            } else if (result.status === "404") {
+                alert("Account does not exist!")
+            }
+        }
+
+        handleRetrieve = async (event) => {
+            event.preventDefault()
+            const data = {
+                username: event.target.name.value.trim()
+            }
+            const postTo = "../api/user/retrieveUser"
+            const opts = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                mode: 'cors',
+                body: new URLSearchParams(data)
+            }
+            const res = await fetch(postTo, opts)
+            const result = await res.json()
+            if (result.status === "200") {
+                alert("You have retrieved an account password successfully!")
+            } else if (result.status === "404") {
+                alert("Account does not exist!")
+            }
+        }
+
+        handleDelete = async (event) => {
+            event.preventDefault()
+            const data = {
+                username: event.target.name.value.trim()
+            }
+            const postTo = "../api/user/deleteUser"
+            const opts = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                mode: 'cors',
+                body: new URLSearchParams(data)
+            }
+            const res = await fetch(postTo, opts)
+            const result = await res.json()
+            if (result.status === "200") {
+                alert("You have deleted an account successfully!")
+            } else if (result.status === "404") {
+                alert("Account does not exist!")
+            }
+        }
+
         render() {
             return (
                 <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
@@ -252,7 +339,7 @@ class AdminHome extends React.Component {
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">CREATE</div>
                    
                     <div className="border rounded-b p-2 font-overpass">
-                        <form>
+                        <form onSubmit={this.handleCreate}>
                         <label className="block text-sm font-bold" name="name">Username</label>
                         <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
                         <label className="block text-sm font-bold" name="password">Password</label>
@@ -269,7 +356,7 @@ class AdminHome extends React.Component {
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">UPDATE</div>
                     
                     <div className="border rounded-b p-2 font-overpass">
-                        <form>
+                        <form onSubmit={this.handleUpdate}>
                         <label className="block text-sm font-bold" name="name">Username</label>
                         <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
                         <label className="block text-sm font-bold" name="password">Password</label>
@@ -285,7 +372,7 @@ class AdminHome extends React.Component {
                     <div>
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">RETRIEVE</div>
                     <div className="border rounded-b p-2 font-overpass">
-                        <form>
+                        <form onSubmit={this.handleRetrieve}>
                         <label className="block text-sm font-bold" name="name">Username</label>
                         <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
@@ -298,7 +385,7 @@ class AdminHome extends React.Component {
 
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">DELETE</div>
                     <div className="border rounded-b p-2 font-overpass">
-                        <form>
+                        <form onSubmit={this.handleDelete}>
                         <label className="block text-sm font-bold" name="name">Username</label>
                         <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
