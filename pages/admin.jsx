@@ -243,6 +243,11 @@ class AdminHome extends React.Component {
 
     class UserCollapse extends React.Component {
 
+        state = {
+            rusername: '',
+            rpassword: ''
+        };
+
         handleCreate = async (event) => {
             event.preventDefault()
             const data = {
@@ -303,6 +308,7 @@ class AdminHome extends React.Component {
             const result = await res.json()
             if (result.status === "200") {
                 alert("You have retrieved an account password successfully!")
+                this.setState({rusername: data.username, rpassword: result.msg})
             } else if (result.status === "404") {
                 alert("Account does not exist!")
             }
@@ -404,12 +410,8 @@ class AdminHome extends React.Component {
                         </thead>
                         <tbody>
                             <tr className="text-slate-700">
-                                <th>01</th>
-                                <th>02</th>
-                            </tr>
-                            <tr className="text-slate-700 border">
-                                <th>01</th>
-                                <th>02</th>
+                                <th>{this.state.rusername}</th>
+                                <th>{this.state.rpassword}</th>
                             </tr>
                         </tbody>
 
