@@ -1,6 +1,11 @@
 let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
+const locCmSchema = new Schema({
+    uid: {type: Schema.Types.ObjectId, required: true, unique: true },
+    body: { type: String, required: true },
+}, { timestamps: true })
+
 const locSchema = new Schema({
     locName: { type: String, required: true, unique: true },
     locData: {
@@ -19,10 +24,15 @@ const locSchema = new Schema({
             precip_mm: Number,
             vis_km: Number
         }, required: true
-    }
+    },
+    comments: {
+        type: [locCmSchema],
+        required: true,
+        default: [],
+    },
 },
     {
-        timestamp: true
+        timestamps: true
     })
 
 export default mongoose.models.locModel || mongoose.model('locModel', locSchema)
