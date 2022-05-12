@@ -2,7 +2,7 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 const locSchema = new Schema({
-    locName: { type: String, required: true },
+    locName: { type: String, required: true, unique: true },
     locData: {
         type: {
             name: String,
@@ -10,7 +10,16 @@ const locSchema = new Schema({
             longitude: Number
         }, required: true
     },
-    weatherData: { type: { weather: String }, required: true }
+    weatherData: {
+        type: {
+            temp_c: Number,
+            wind_kph: Number,
+            wind_dir: String,
+            humidity: Number,
+            precip_mm: Number,
+            vis_km: Number
+        }, required: true
+    }
 },
     {
         timestamp: true
