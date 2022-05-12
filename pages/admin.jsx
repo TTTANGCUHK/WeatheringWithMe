@@ -1,5 +1,6 @@
 import React from 'react';
 import { Collapse } from "react-collapse";
+import Router from "next/router";
 
 
 class AdminHome extends React.Component {
@@ -19,6 +20,12 @@ class AdminHome extends React.Component {
         this.UserElement.current.handleMenuClick();
     };
 
+    handleLogout = () => {
+        if (typeof window !== 'undefined') {
+            Router.push('/form')
+        }
+    }
+
   render() {
     return (
 
@@ -30,7 +37,7 @@ class AdminHome extends React.Component {
             <div onClick={this.handleClickR}><Menu name="Request Updated Data" anchor="#req"/></div>
             <div onClick={this.handleClickL}><Menu name="Location Data" anchor="#loc"/></div>
             <div onClick={this.handleClickU}><Menu name="User Data" anchor="#user"/></div>
-            <div><Menu name="Log Out" anchor="#"/></div>
+            <div onClick={this.handleLogout}><Menu name="Log Out" anchor="#"/></div>
 
             </div>            
         </div>
