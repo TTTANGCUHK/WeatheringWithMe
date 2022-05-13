@@ -17,10 +17,10 @@ export default async function handler(req, res) {
   let username, lid
   switch (req.body.action) {
     case 'add':
-      ({ username, lid } = JSON.parse(req.body.payload));
+      ({ username, lid } = req.body.payload);
       if ([username, lid].includes(undefined) || [username, lid].includes(null))
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
-        User.findOneAndUpdate(
+      User.findOneAndUpdate(
         { username },
         { $push: { favLoc: { lid } } },
         (e) => {
@@ -44,10 +44,10 @@ export default async function handler(req, res) {
       }
       break
     case 'delete':
-      ({ username, lid } = JSON.parse(req.body.payload));
+      ({ username, lid } = req.body.payload);
       if ([username, lid].includes(undefined) || [username, lid].includes(null))
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
-        User.findOneAndUpdate(
+      User.findOneAndUpdate(
         { username },
         { $pull: { favLoc: { lid } } },
         (e) => {

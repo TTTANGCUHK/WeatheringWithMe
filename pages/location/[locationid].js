@@ -8,6 +8,9 @@ import CommentBox from "../../component/CommentBox";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import { Button } from "@mui/material";
 
 function LocationPage() {
   const router = useRouter();
@@ -24,6 +27,7 @@ function LocationPage() {
   const [loading, setLoading] = useState(true);
   const [weather, setWeather] = useState("");
   const [res, setRes] = useState("");
+  const [fav, setFav] = useState(false);
 
   useEffect(() => {
     // Fetch location data from API to locations state
@@ -62,6 +66,38 @@ function LocationPage() {
       });
     }
   }, [location]);
+
+  useEffect(() => {
+    if (session) {
+      axios
+        .post("/api/favoriteLocation", {
+          action: 'get',
+          payload: session.user.username
+        })
+        .then(res => res.data.favLoc.forEach((loc) => {
+          if (loc.lid == locationid) {
+            setFav(true)
+          }
+        }))
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, [session])
+
+  function handleFavourite(e) {
+    e.preventDefault();
+    axios.post("/api/favoriteLocation", {
+      action: (fav ? 'delete' : 'add'),
+      payload: { username: session.user.username, lid: locationid }
+    }).then(res => {
+      if (!fav)
+        alert("Added to favorite location!")
+      else
+        alert("Removed from favorite location!")
+    })
+    setFav(!fav)
+  }
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyAw6wxQHqtInbxZz-O6kdq0JOs_DGNkAA4",
@@ -132,6 +168,10 @@ function LocationPage() {
             </ListItem>
             <ListItem>
               <ListItemText primary="Last updated" secondary={location.updatedAt} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Favourite" />
+              <Button startIcon={fav ? <StarIcon /> : <StarBorderOutlinedIcon />} onClick={handleFavourite} />
             </ListItem>
           </List>
         </div>
