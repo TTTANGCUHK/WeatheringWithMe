@@ -4,27 +4,21 @@ import Table from "../component/Table.js";
 import Map from "../component/Map.js";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import Router from "next/router";
+import { useRouter } from 'next/router'
 
 function HomePage() {
-
+  const router = useRouter()
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      Router.push('/form')
+      router.push('/form')
     },
   })
-  if (session && session.user.isAdmin)
-    Router.push('/admin')
-
-  if (status === "loading") {
-    return <h2>Loading...</h2>
-  }
-
 
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
+    if (!router.isReady) return;
     // Fetch location data from API to locations state
     axios
       .post("/api/location", {
@@ -39,12 +33,18 @@ function HomePage() {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  }, [router.isReady]);
 
-  useEffect(() => {
-    // When locations changed its value, then will execute this function
-    console.log(locations);
-  }, [locations]);
+  // useEffect(() => {
+  //   // When locations changed its value, then will execute this function
+  //   console.log(locations);
+  // }, [locations]);
+
+  if (status === "loading") {
+    return <h2>Loading...</h2>
+  } else if (session.user.isAdmin) {
+    router.push('/admin')
+  }
 
   if (locations.length == 0) return <div></div>;
 
