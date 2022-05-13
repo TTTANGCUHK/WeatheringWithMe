@@ -4,7 +4,7 @@ import Table from '../component/Table.js';
 import Map from '../component/Map.js';
 import fetchWeatherAPI from '../backend/dataFetch/fetchAPI'
 
-import { useSession } from 'next-auth/react'
+import {getSession, useSession} from 'next-auth/react'
 import Router from "next/router";
 
 // const hardcodedData = [{
@@ -131,6 +131,7 @@ function HomePage() {
   // useEffect(() => {
   //   const securePage = async () => {
   //     const session = await getSession()
+  //     console.log(session)
   //     if (!session) {
   //       if (typeof window !== 'undefined') {
   //         await Router.push('/form')
@@ -141,7 +142,7 @@ function HomePage() {
   //   }
   //   securePage()
   // }, [])
-
+  //
   // if (loading) {
   //   return <h2>Loading...</h2>
   // }

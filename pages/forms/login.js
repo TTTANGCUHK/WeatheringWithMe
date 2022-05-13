@@ -19,11 +19,16 @@ const loginPage = () => {
             password: event.target.password.value
         }
         const result = await signIn("credentials", {redirect: false, username: data.username, password: data.password})
-        if (result?.ok)
-            await Router.push('/')
-        else {
-            alert("NOT OK")
+        console.log("RE: " + result.uesrname)
+        if (result?.ok) {
+            alert("OK")
+            // await Router.push('/')
+        } else {
+            alert("Wrong username or password")
         }
+        // else {
+        //     alert("NOT OK")
+        // }
         // const postTo = "../api/user/loginUser"
         // const opts = {
         //     method: 'POST',

@@ -22,39 +22,30 @@ export default NextAuth({
             },
             authorize: async (credentials) => {
 
-                connectToMongoDB()
-                const db = mongoose.connection
-                const User = userModel
+                await connectToMongoDB()
+                const db = await mongoose.connection
+                const User = await userModel
 
-                User.findOne({username: credentials.username}, (err, user) =>{
-                    if (err) {
-                        console.log("ERROR:" + err)
-                        // return res.status(400).json({ status: 'error', msg: err })
-                    }
+                const result = await User.findOne({username: credentials.username})
 
-                    if (user == null) {
-                        console.log("NO USER")
-                        // return res.status(404).json({ status: '404', msg: 'Username does not exist' })
-                    }
+                if (!result) {
+                    await db.close()
+                    console.log("SHIT")
+                    return null
+                }
 
-                    if (APICRYPTO.CRYPTO_PW(credentials.password, user.salt) !== user.password) {
-                        console.log("WRONG PW")
-                        // return res.status(403).json({ status: '403', msg: 'Wrong password' })
-                    } else {
-                        if (user.isAdmin) {
-                            console.log("ADMIN")
-                            // return res.status(200).json({ status: '200', msg: 'Admin Login' })
-                        } else {
-                            console.log("USER")
-                            return user
-                            //             await Router.push('/')
-                            // return res.status(200).json({ status: '200', msg: 'User Login' })
-                        }
-                    }
+                const checkPw = await APICRYPTO.CRYPTO_PW(credentials.password, result.salt) === result.password
 
-                });
+                if (!checkPw) {
+                    console.log("FUCK")
+                    await db.close()
+                    return null
+                }
 
-                return null
+                console.log(result)
+                await db.close()
+                return { username: result.username, isAdmin: result.isAdmin }
+
             }
         })
     ],
@@ -64,6 +55,15 @@ export default NextAuth({
     },
 
     callbacks: {
+        async signIn({ user}) {
+            console.log(user)
+            if (user.isAdmin) {
+                // await Router.push('/admin')
+            }
+            else
+                return true
+        },
+
         async session({ session, token}) {
             session.accessToken = token.accessToken
             return session
