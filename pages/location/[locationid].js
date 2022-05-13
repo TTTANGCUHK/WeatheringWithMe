@@ -29,7 +29,7 @@ function LocationPage() {
           setLocation(response.data); // Meaning is : locations = hardcodedData
 
           console.log("Calling get weather API");
-          const thing = fetchWeatherAPI(response.data.locData.name);
+          const thing = fetchWeatherAPI({ name: response.data.locData.name });
           thing.then(function (res) {
             console.log({ res });
             setWeather(res.data.current);

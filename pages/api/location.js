@@ -3,18 +3,7 @@ import connectToMongoDB from '../../backend/mongo/mongoDB'
 import locModel from '../../backend/dbSchema/locationsSchema'
 import APICHECK from './APICHECK'
 import axios from 'axios'
-
-async function fetchWeatherAPI({ lat, lon }) {
-  let URL = "http://api.weatherapi.com/v1/current.json";
-  let weatherData = "";
-  return await axios.get(URL, {
-    params: {
-      key: "bca6d87e69f74e0b84932316220805",
-      q: lat + ',' + lon,
-      aqi: true,
-    },
-  });
-}
+import fetchWeatherAPI from '../../backend/dataFetch/fetchAPI'
 
 export default async function handler(req, res) {
   let err
@@ -95,7 +84,7 @@ export default async function handler(req, res) {
       if (req.body.payload === undefined)
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
       Location.deleteOne({ locName: req.body.payload }, (e, location) => {
-        if (e) return res.status(400).json({ status: 'error', msg: e })
+        if (e || location.deletedCount == 0) return res.status(400).json({ status: 'error', msg: 'Failed to delete location' })
         return res.status(200).json(location)
       })
       break
@@ -130,6 +119,14 @@ export default async function handler(req, res) {
       })
       Location.findOne({}, "", (e, x) => {
         res.status(200).json({ status: 200, msg: x.updatedAt })
+      })
+      break
+    case 'getIdByName':
+      if (req.body.payload === undefined)
+        return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
+      Location.findOne({ locName: req.body.payload }, "_id", (e, id) => {
+        if (e || id == null) return res.status(400).json({ status: 'error', msg: e })
+        return res.status(200).json(id)
       })
   }
 }

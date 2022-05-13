@@ -2,6 +2,7 @@ import React from 'react';
 import { Collapse } from "react-collapse";
 import Router from "next/router";
 import axios from 'axios';
+import fetchWeatherAPI from '../backend/dataFetch/fetchAPI';
 
 
 class AdminHome extends React.Component {
@@ -140,11 +141,103 @@ class Request extends React.Component {
 }
 
 class LocCollapse extends React.Component {
+    handleCreate(e) {
+        e.preventDefault()
+        let name = document.getElementById("name").value
+        if (name) {
+            fetchWeatherAPI({ name: name }).then(async data => {
+                if (data.data.location.name == name)
+                    axios.post("./api/location", {
+                        action: "add",
+                        payload: JSON.stringify({
+                            "locationName": data.data.location.name,
+                            "latitude": data.data.location.lat,
+                            "longitude": data.data.location.lon,
+                            "weatherData": {
+                                "temp_c": data.data.current.temp_c,
+                                "wind_kph": data.data.current.wind_kph,
+                                "wind_dir": data.data.current.wind_dir,
+                                "humidity": data.data.current.humidity,
+                                "precip_mm": data.data.current.precip_mm,
+                                "vis_km": data.data.current.vis_km
+                            }
+                        })
+                    }).then(res => {
+                        alert('Location created!')
+                    }).catch(res => {
+                        alert('Failed to create location (probably already exist)!')
+                    })
+            }
+            ).catch(err => {
+                alert(err.response.data.error.message)
+            })
+        } else {
+            alert('Fill in the location name to create new location!')
+        }
+    }
+
+    handleUpdate(e) {
+        e.preventDefault()
+        let name = document.getElementById("name").value
+        if (name) {
+            fetchWeatherAPI({ name: name }).then(async data => {
+                if (data.data.location.name == name)
+                    axios.post("./api/location", {
+                        action: "update",
+                        payload: JSON.stringify({
+                            "locationName": data.data.location.name,
+                            "latitude": data.data.location.lat,
+                            "longitude": data.data.location.lon,
+                            "weatherData": {
+                                "temp_c": data.data.current.temp_c,
+                                "wind_kph": data.data.current.wind_kph,
+                                "wind_dir": data.data.current.wind_dir,
+                                "humidity": data.data.current.humidity,
+                                "precip_mm": data.data.current.precip_mm,
+                                "vis_km": data.data.current.vis_km
+                            }
+                        })
+                    }).then(res => {
+                        alert('Location updated!')
+                    }).catch(res => {
+                        alert('Failed to update location!')
+                    })
+            }
+            ).catch(err => {
+                alert(err.response.data.error.message)
+            })
+        } else {
+            alert('Fill in the location name to update location!')
+        }
+    }
+
+    handleDelete(e) {
+        e.preventDefault()
+        let name = document.getElementById("name").value
+        if (name) {
+            axios.post('/api/location', { action: 'delete', payload: name })
+                .then(res => alert("Location deleted!"))
+                .catch(res => alert("Failed to delete location!"))
+        } else {
+            alert('Fill in the location name to delete location!')
+        }
+    }
+
+    handleRequest(e) {
+        e.preventDefault()
+        let name = document.getElementById("name").value
+        if (name) {
+            axios.post('/api/location', { action: 'getIdByName', payload: name })
+                .then(res => axios.post('/api/location', { action: 'get', payload: res.data._id })
+                    .then(res => alert(JSON.stringify(res.data))))
+                .catch(res => alert("Cannot find location in database"))
+        }
+    }
     render() {
         return (
             <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
 
-                <div className="columns-4 mb-3 mx-1 mt-1">
+                <div className="columns mb-3 mx-1 mt-1">
 
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">CREATE</div>
                     <div className="border rounded-b p-2 font-overpass">
@@ -152,61 +245,10 @@ class LocCollapse extends React.Component {
                             <label className="block text-sm font-bold" name="name">Name</label>
                             <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
-                            <label className="block text-sm mt-2 font-bold" name="latitude">Latitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="longtitude">Longtitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="longtitude" type="text" />
-
-                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">CREATE</button>
-                        </form>
-                    </div>
-
-                    <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">UPDATE</div>
-                    <div className="border rounded-b p-2 font-overpass">
-                        <form>
-                            <label className="block text-sm font-bold" name="name">Name</label>
-                            <input className="w-full py-1 border rounded px-1" id="name" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="latitude">Latitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="longtitude">Longtitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="longtitude" type="text" />
-
-                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">UPDATE</button>
-                        </form>
-                    </div>
-
-                    <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">RETRIEVE</div>
-                    <div className="border rounded-b p-2 font-overpass">
-                        <form>
-                            <label className="block text-sm font-bold" name="name">Name</label>
-                            <input className="w-full py-1 border rounded px-1" id="name" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="latitude">Latitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="longtitude">Longtitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="longtitude" type="text" />
-
-                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2" type="submit">RETRIEVE</button>
-                        </form>
-                    </div>
-
-                    <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">DELETE</div>
-                    <div className="border rounded-b p-2 font-overpass">
-                        <form>
-                            <label className="block text-sm font-bold" name="name">Name</label>
-                            <input className="w-full py-1 border rounded px-1" id="name" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="latitude">Latitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
-
-                            <label className="block text-sm mt-2 font-bold" name="longtitude">Longtitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="longtitude" type="text" />
-
-                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">DELETE</button>
+                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleCreate}>CREATE</button>
+                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleUpdate}>UPDATE</button>
+                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleDelete}>DELETE</button>
+                            <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleRequest}>REQUEST</button>
                         </form>
                     </div>
 
