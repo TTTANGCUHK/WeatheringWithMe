@@ -79,21 +79,25 @@ function LocationPage() {
 
   return (
     <>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={7}
-        center={center}
-        options={options}
-      >
-        <Marker
-          key={location._id}
-          position={{
-            lat: location.locData.latitude,
-            lng: location.locData.longitude,
-          }}
-        />
-      </GoogleMap>
-      <h1>{location.locData.name}</h1>
+      <div className="flex flex-col justify-center items-center">
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={7}
+          center={center}
+          options={options}
+        >
+          <Marker
+            key={location._id}
+            position={{
+              lat: location.locData.latitude,
+              lng: location.locData.longitude,
+            }}
+          />
+        </GoogleMap>
+      </div>
+      <br />
+      <h1 className="text-center">{location.locData.name}</h1>
+      <br />
       <div className="w-full">
         <table className="table-auto w-full ">
           <thead>
@@ -108,7 +112,7 @@ function LocationPage() {
           </thead>
           <tbody>
             <tr key={location._id}>
-              <td className="text-center"> {weather.temp_c} </td>
+              <td className="text-center">{weather.temp_c}</td>
               <td className="text-center">{weather.wind_kph}</td>
               <td className="text-center">{weather.wind_dir}</td>
               <td className="text-center">{weather.humidity}</td>
@@ -117,10 +121,12 @@ function LocationPage() {
             </tr>
           </tbody>
         </table>
+
         <p>Last updated: {location.updatedAt}</p>
       </div>
+      <br />
       <a href="../..">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
           Back to home page
         </button>
       </a>

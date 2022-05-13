@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 function Map({ locations }) {
   const router = useRouter()
@@ -29,23 +29,30 @@ function Map({ locations }) {
   if (!isLoaded) return "";
 
   return (
-    <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      zoom={3}
-      center={center}
-      options={options}
-    >
-      {
-        locations.map((location, index) => (
-          <Marker
-            key={location._id}
-            position={{ lat: location.locData.latitude, lng: location.locData.longitude }}
-            onClick={() => { router.push("/location/" + location._id) }}
-          />
-        ))
-      }
-    </GoogleMap>
-  )
+    <>
+      <div className="flex flex-col justify-center items-center">
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={3}
+          center={center}
+          options={options}
+        >
+          {locations.map((location, index) => (
+            <Marker
+              key={location._id}
+              position={{
+                lat: location.locData.latitude,
+                lng: location.locData.longitude,
+              }}
+              onClick={() => {
+                router.push("/location/" + location._id);
+              }}
+            />
+          ))}
+        </GoogleMap>
+      </div>
+    </>
+  );
 }
 
 export default Map;
