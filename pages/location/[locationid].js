@@ -86,7 +86,7 @@ function LocationPage() {
   if (loadError) return "";
   if (!isLoaded) return "";
 
-  if (loading || !session.user) return <div></div>;
+  if (loading || !session) return <div></div>;
 
   return (
     <>
