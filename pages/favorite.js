@@ -21,6 +21,10 @@ export default function favorite() {
     { field: 'lon', headerName: 'Longitude', width: 130, flex: 1 }
   ]
 
+  function handleCellClick(e) {
+    router.push(`/location/${e.row._id}`)
+  }
+
   useEffect(() => {
     if (session) {
       axios
@@ -82,6 +86,7 @@ export default function favorite() {
           columns={columns}
           pageSize={100}
           rowsPerPageOptions={[100]}
+          onCellClick={handleCellClick}
         />
       </div>
     </>
