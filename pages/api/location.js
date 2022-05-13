@@ -2,6 +2,19 @@ import mongoose from 'mongoose'
 import connectToMongoDB from '../../backend/mongo/mongoDB'
 import locModel from '../../backend/dbSchema/locationsSchema'
 import APICHECK from './APICHECK'
+import axios from 'axios'
+
+async function fetchWeatherAPI({ lat, lon }) {
+  let URL = "http://api.weatherapi.com/v1/current.json";
+  let weatherData = "";
+  return await axios.get(URL, {
+    params: {
+      key: "bca6d87e69f74e0b84932316220805",
+      q: lat + ',' + lon,
+      aqi: true,
+    },
+  });
+}
 
 export default async function handler(req, res) {
   let err
@@ -85,5 +98,36 @@ export default async function handler(req, res) {
         if (e) return res.status(400).json({ status: 'error', msg: e })
         return res.status(200).json(location)
       })
+      break
+    case 'updateAll':
+      Location.find({}, "locData", (e, Locations) => {
+        Locations.forEach(async loc => {
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+          }
+          await sleep(1000)
+          fetchWeatherAPI({ lat: loc.locData.latitude, lon: loc.locData.longitude }).then(data => {
+            Location.findOneAndUpdate({ locName: data.data.location.name },
+              {
+                locName: data.data.location.name,
+                locData: {
+                  name: data.data.location.name,
+                  latitude: data.data.location.lat,
+                  longitude: data.data.location.lon
+                },
+                weatherData: {
+                  "temp_c": data.data.current.temp_c,
+                  "wind_kph": data.data.current.wind_kph,
+                  "wind_dir": data.data.current.wind_dir,
+                  "humidity": data.data.current.humidity,
+                  "precip_mm": data.data.current.precip_mm,
+                  "vis_km": data.data.current.vis_km
+                }
+              })
+          }
+          )
+        })
+      })
+      res.status(200).json({ status: 200, msg: 'Data updated' })
   }
 }
