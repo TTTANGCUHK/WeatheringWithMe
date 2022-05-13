@@ -19,9 +19,9 @@ const loginPage = () => {
             password: event.target.password.value
         }
         const result = await signIn("credentials", {redirect: false, username: data.username, password: data.password})
-        console.log("RE: " + result)
         if (result?.ok) {
             alert("OK")
+            
             await Router.push('/')
         } else {
             alert("Wrong username or password")
