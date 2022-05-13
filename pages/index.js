@@ -3,7 +3,7 @@ import Link from "next/link";
 import Table from "../component/Table.js";
 import Map from "../component/Map.js";
 import axios from "axios";
-import {useSession} from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Router from "next/router";
 
 function HomePage() {
@@ -14,7 +14,7 @@ function HomePage() {
       Router.push('/form')
     },
   })
-  if (session.user.isAdmin)
+  if (session && session.user.isAdmin)
     Router.push('/admin')
 
   if (status === "loading") {

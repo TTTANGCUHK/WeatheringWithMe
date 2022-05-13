@@ -3,7 +3,7 @@ import { Collapse } from "react-collapse";
 import Router from "next/router";
 import axios from 'axios';
 import fetchWeatherAPI from '../backend/dataFetch/fetchAPI';
-import {signOut} from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 
 class AdminHome extends React.Component {
@@ -25,7 +25,7 @@ class AdminHome extends React.Component {
 
     handleLogout = () => {
         if (typeof window !== 'undefined') {
-            signOut({callbackUrl: 'http://localhost:3000/form'})
+            signOut({ callbackUrl: 'http://localhost:3000/form' })
         }
     }
 
@@ -240,15 +240,15 @@ class LocCollapse extends React.Component {
 
                 <div className="columns mb-3 mx-1 mt-1">
 
-                    <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">CREATE</div>
+                    <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">Location</div>
                     <div className="border rounded-b p-2 font-overpass">
+                        <p>Input the location name to apply CRUD operation.</p>
+                        <p>Create, Update: Weather and latitude and longitude will be auto filled from API.</p>
+                        <p>Request: An entry that matches the location name will be returned.</p>
+                        <p>Delete: An entry that matches the location name will be deleted.</p>
                         <form>
-                            <label className="block text-sm font-bold" name="name">Name</label>
+                            <label className="block text-sm font-bold" name="name">Location Name</label>
                             <input className="w-full py-1 border rounded px-1" id="name" type="text" />
-                            <label className="block text-sm font-bold" name="latitude">Latitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
-                            <label className="block text-sm font-bold" name="longitude">Longitude</label>
-                            <input className="w-full py-1 border rounded px-1" id="longitude" type="text" />
 
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleCreate}>CREATE</button>
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleUpdate}>UPDATE</button>
@@ -256,31 +256,7 @@ class LocCollapse extends React.Component {
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleRequest}>REQUEST</button>
                         </form>
                     </div>
-
                 </div>
-
-                <table className="table-fixed border-collapse border mx-auto w-full ">
-                    <thead>
-                        <tr className="bg-slate-100 text-slate-500">
-                            <th>Name</th>
-                            <th>Latitude</th>
-                            <th>Longtitude</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="text-slate-700">
-                            <th>01</th>
-                            <th>02</th>
-                            <th>03</th>
-                        </tr>
-                        <tr className="text-slate-700 border">
-                            <th>01</th>
-                            <th>02</th>
-                            <th>03</th>
-                        </tr>
-                    </tbody>
-
-                </table>
             </div>
         );
     }
@@ -305,14 +281,15 @@ class UserCollapse extends React.Component {
 
     state = {
         rusername: '',
-        rpassword: ''
+        rpassword: '',
+        rsalt: ''
     };
 
     handleCreate = async (event) => {
         event.preventDefault()
         const data = {
-            username: event.target.name.value.trim(),
-            password: event.target.password.value
+            username: event.target.parentElement.name.value.trim(),
+            password: event.target.parentElement.password.value
         }
         const postTo = "../api/user/createUser"
         const opts = {
@@ -333,8 +310,8 @@ class UserCollapse extends React.Component {
     handleUpdate = async (event) => {
         event.preventDefault()
         const data = {
-            username: event.target.name.value.trim(),
-            password: event.target.password.value
+            username: event.target.parentElement.name.value.trim(),
+            password: event.target.parentElement.password.value
         }
         const postTo = "../api/user/updateUser"
         const opts = {
@@ -355,7 +332,7 @@ class UserCollapse extends React.Component {
     handleRetrieve = async (event) => {
         event.preventDefault()
         const data = {
-            username: event.target.name.value.trim()
+            username: event.target.parentElement.name.value.trim()
         }
         const postTo = "../api/user/retrieveUser"
         const opts = {
@@ -368,7 +345,7 @@ class UserCollapse extends React.Component {
         const result = await res.json()
         if (result.status === "200") {
             alert("You have retrieved an account password successfully!")
-            this.setState({ rusername: data.username, rpassword: result.msg })
+            this.setState({ rusername: data.username, rpassword: result.msg.userPW, rsalt: result.msg.userSALT })
         } else if (result.status === "404") {
             alert("Account does not exist!")
         }
@@ -377,7 +354,7 @@ class UserCollapse extends React.Component {
     handleDelete = async (event) => {
         event.preventDefault()
         const data = {
-            username: event.target.name.value.trim()
+            username: event.target.parentElement.name.value.trim()
         }
         const postTo = "../api/user/deleteUser"
         const opts = {
@@ -399,66 +376,43 @@ class UserCollapse extends React.Component {
         return (
             <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
 
-                <div className="columns-4 mb-3 mx-1 mt-1">
+                <div className="columns-2 mb-3 mx-1 mt-1">
 
                     <div>
-                        <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">CREATE</div>
+                        <div className="rounded-t w-36 bg-sky-600 text-white text-center font-overpass p-1 px-2">CREATE/UPDATE</div>
 
                         <div className="border rounded-b p-2 font-overpass">
-                            <form onSubmit={this.handleCreate}>
+                            <form>
+                                <p>Create: Create an new user with the given username and password</p>
+                                <p>Update: Update an existing user with the given username and password</p>
                                 <label className="block text-sm font-bold" name="name">Username</label>
                                 <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
                                 <label className="block text-sm font-bold" name="password">Password</label>
                                 <input className="w-full py-1 border rounded px-1" id="password" type="text" />
 
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">CREATE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleCreate}>CREATE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleUpdate}>UPDATE</button>
                             </form>
                         </div>
 
                     </div>
 
                     <div>
-
-                        <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">UPDATE</div>
+                        <div className="rounded-t w-48 bg-sky-600 text-white text-center font-overpass p-1 px-2">RETRIEVE/DELETE</div>
 
                         <div className="border rounded-b p-2 font-overpass">
-                            <form onSubmit={this.handleUpdate}>
-                                <label className="block text-sm font-bold" name="name">Username</label>
-                                <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
-                                <label className="block text-sm font-bold" name="password">Password</label>
-                                <input className="w-full py-1 border rounded px-1" id="password" type="text" />
-
-
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">UPDATE</button>
-                            </form>
-                        </div>
-
-                    </div>
-
-                    <div>
-                        <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">RETRIEVE</div>
-                        <div className="border rounded-b p-2 font-overpass">
-                            <form onSubmit={this.handleRetrieve}>
+                            <form>
+                                <p>Retrieve: Retrieve an existing user's username, password and salt</p>
+                                <p>Delete: Delete an existing user</p>
                                 <label className="block text-sm font-bold" name="name">Username</label>
                                 <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2 mb-5" type="submit">RETRIEVE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2 mb-5" type="submit" onClick={this.handleRetrieve}>RETRIEVE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleDelete}>DELETE</button>
                             </form>
                         </div>
                     </div>
 
-                    <div>
-
-                        <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2 mt-3">DELETE</div>
-                        <div className="border rounded-b p-2 font-overpass">
-                            <form onSubmit={this.handleDelete}>
-                                <label className="block text-sm font-bold" name="name">Username</label>
-                                <input className="w-full py-1 border rounded px-1" id="name" type="text" />
-
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit">DELETE</button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
 
                 <table className="table-fixed border-collapse border mx-auto w-full ">
@@ -466,12 +420,14 @@ class UserCollapse extends React.Component {
                         <tr className="bg-slate-100 text-slate-500">
                             <th>Username</th>
                             <th>Password</th>
+                            <th>Salt</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr className="text-slate-700">
                             <th>{this.state.rusername}</th>
                             <th>{this.state.rpassword}</th>
+                            <th>{this.state.rsalt}</th>
                         </tr>
                     </tbody>
 
