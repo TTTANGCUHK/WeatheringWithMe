@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   if (err = APICHECK.PARAMS_REQUIRE(req, ['action', 'payload']), err)
     return res.status(err.httpStatus).json(err.apiRes)
 
-  connectToMongoDB()
+  await connectToMongoDB()
   const db = mongoose.connection
   const Location = locModel
   let payload
@@ -47,6 +47,7 @@ export default async function handler(req, res) {
     case 'get':
       if (req.body.payload === 'all') {
         Location.find({}, "locData weatherData", (e, locations) => {
+          console.log(e, locations)
           if (e) return res.status(400).json({ status: 'error', msg: e })
           return res.status(200).json(locations)
         })
