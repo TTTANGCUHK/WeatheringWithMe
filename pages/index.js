@@ -3,17 +3,17 @@ import Link from "next/link";
 import Table from "../component/Table.js";
 import Map from "../component/Map.js";
 import axios from "axios";
-import {useSession} from "next-auth/react";
-import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function HomePage() {
-  const router = useRouter()
+  const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/form')
+      router.push("/form");
     },
-  })
+  });
 
   const [locations, setLocations] = useState([]);
 
@@ -41,9 +41,9 @@ function HomePage() {
   // }, [locations]);
 
   if (status === "loading") {
-    return <h2>Loading...</h2>
+    return <h2>Loading...</h2>;
   } else if (session.user.isAdmin) {
-    router.push('/admin')
+    router.push("/admin");
   }
 
   if (locations.length == 0) return <div></div>;
@@ -53,6 +53,14 @@ function HomePage() {
     <>
       <Map locations={locations} />
       <Table locations={locations} />
+      <button
+        className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        onClick={() => {
+          router.push("/favlocation/" + user._id);
+        }}
+      >
+        View Your Favourite Location
+      </button>
     </>
   );
 }
