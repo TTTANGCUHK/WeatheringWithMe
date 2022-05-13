@@ -495,14 +495,14 @@ class UserCollapse extends React.Component {
                     </thead>
                     <tbody>
                         <tr className="text-slate-700">
-                            <th>{this.state.rusername}</th>
-                            <th>{this.state.rpassword}</th>
-                            <th>{this.state.rsalt}</th>
+                            <th style={{ 'word-wrap': 'break-word' }}>{this.state.rusername}</th>
+                            <th style={{ 'word-wrap': 'break-word' }}>{this.state.rpassword}</th>
+                            <th style={{ 'word-wrap': 'break-word' }}>{this.state.rsalt}</th>
                         </tr>
                     </tbody>
 
                 </table>
-            </div>
+            </div >
         );
     }
 }
