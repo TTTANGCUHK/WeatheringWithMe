@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { setState } from 'react';
 import { Collapse } from "react-collapse";
 import Router from "next/router";
 import axios from 'axios';
 import fetchWeatherAPI from '../../backend/dataFetch/fetchAPI';
 import { signOut } from "next-auth/react";
-
+import { Typography } from "@mui/material";
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 class AdminHome extends React.Component {
     constructor(props) {
@@ -142,32 +143,45 @@ class Request extends React.Component {
 }
 
 class LocCollapse extends React.Component {
-    handleCreate(e) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            locations: [],
+            columns: [
+                { field: 'locName', headerName: 'Location Name', width: 130, flex: 1 },
+                { field: 'lat', headerName: 'Latitude', width: 130, flex: 1 },
+                { field: 'lon', headerName: 'Longitude', width: 130, flex: 1 }
+            ]
+        }
+    }
+
+    handleCreate = e => {
         e.preventDefault()
         let name = document.getElementById("name").value
-        if (name) {
+        let lat = document.getElementById("latitude").value
+        let lon = document.getElementById("longitude").value
+        if (name && lat && lon) {
             fetchWeatherAPI({ name: name }).then(async data => {
-                if (data.data.location.name == name)
-                    axios.post("./api/location", {
-                        action: "add",
-                        payload: JSON.stringify({
-                            "locationName": data.data.location.name,
-                            "latitude": data.data.location.lat,
-                            "longitude": data.data.location.lon,
-                            "weatherData": {
-                                "temp_c": data.data.current.temp_c,
-                                "wind_kph": data.data.current.wind_kph,
-                                "wind_dir": data.data.current.wind_dir,
-                                "humidity": data.data.current.humidity,
-                                "precip_mm": data.data.current.precip_mm,
-                                "vis_km": data.data.current.vis_km
-                            }
-                        })
-                    }).then(res => {
-                        alert('Location created!')
-                    }).catch(res => {
-                        alert('Failed to create location (probably already exist)!')
+                axios.post("./api/location", {
+                    action: "add",
+                    payload: JSON.stringify({
+                        "locationName": name,
+                        "latitude": lat,
+                        "longitude": lon,
+                        "weatherData": {
+                            "temp_c": data.data.current.temp_c,
+                            "wind_kph": data.data.current.wind_kph,
+                            "wind_dir": data.data.current.wind_dir,
+                            "humidity": data.data.current.humidity,
+                            "precip_mm": data.data.current.precip_mm,
+                            "vis_km": data.data.current.vis_km
+                        }
                     })
+                }).then(res => {
+                    alert('Location created!')
+                }).catch(res => {
+                    alert('Failed to create location (probably already exist)!')
+                })
             }
             ).catch(err => {
                 alert(err.response.data.error.message)
@@ -177,46 +191,52 @@ class LocCollapse extends React.Component {
         }
     }
 
-    handleUpdate(e) {
+    handleUpdate = e => {
         e.preventDefault()
         let name = document.getElementById("name").value
-        if (name) {
+        let lat = document.getElementById("latitude").value
+        let lon = document.getElementById("longitude").value
+        let _id = document.getElementById("_id").value
+        if (name && lat && lon && _id) {
             fetchWeatherAPI({ name: name }).then(async data => {
-                if (data.data.location.name == name)
-                    axios.post("./api/location", {
-                        action: "update",
-                        payload: JSON.stringify({
-                            "locationName": data.data.location.name,
-                            "latitude": data.data.location.lat,
-                            "longitude": data.data.location.lon,
-                            "weatherData": {
-                                "temp_c": data.data.current.temp_c,
-                                "wind_kph": data.data.current.wind_kph,
-                                "wind_dir": data.data.current.wind_dir,
-                                "humidity": data.data.current.humidity,
-                                "precip_mm": data.data.current.precip_mm,
-                                "vis_km": data.data.current.vis_km
-                            }
-                        })
-                    }).then(res => {
-                        alert('Location updated!')
-                    }).catch(res => {
-                        alert('Failed to update location!')
+                axios.post("./api/location", {
+                    action: "update",
+                    payload: JSON.stringify({
+                        "locationName": name,
+                        "latitude": lon,
+                        "longitude": lat,
+                        "weatherData": {
+                            "temp_c": data.data.current.temp_c,
+                            "wind_kph": data.data.current.wind_kph,
+                            "wind_dir": data.data.current.wind_dir,
+                            "humidity": data.data.current.humidity,
+                            "precip_mm": data.data.current.precip_mm,
+                            "vis_km": data.data.current.vis_km
+                        },
+                        "_id": _id
                     })
+                }).then(res => {
+                    alert('Location updated!')
+                }).catch(res => {
+                    alert('Failed to update location!')
+                })
             }
             ).catch(err => {
                 alert(err.response.data.error.message)
             })
         } else {
-            alert('Fill in the location name to update location!')
+            alert('Fill in the location information to update location!')
         }
     }
 
     handleDelete(e) {
         e.preventDefault()
         let name = document.getElementById("name").value
-        if (name) {
-            axios.post('/api/location', { action: 'delete', payload: name })
+        let lat = document.getElementById("latitude").value
+        let lon = document.getElementById("longitude").value
+        let _id = document.getElementById("_id").value
+        if (_id) {
+            axios.post('/api/location', { action: 'delete', payload: _id })
                 .then(res => alert("Location deleted!"))
                 .catch(res => alert("Failed to delete location!"))
         } else {
@@ -224,16 +244,38 @@ class LocCollapse extends React.Component {
         }
     }
 
-    handleRequest(e) {
+    handleRequest = async e => {
         e.preventDefault()
-        let name = document.getElementById("name").value
-        if (name) {
-            axios.post('/api/location', { action: 'getIdByName', payload: name })
-                .then(res => axios.post('/api/location', { action: 'get', payload: res.data._id })
-                    .then(res => alert(JSON.stringify(res.data))))
-                .catch(res => alert("Cannot find location in database"))
-        }
+        // let name = document.getElementById("name").value
+        // if (name) {
+        //     axios.post('/api/location', { action: 'getIdByName', payload: name })
+        //         .then(res => axios.post('/api/location', { action: 'get', payload: res.data._id })
+        //             .then(res => alert(JSON.stringify(res.data))))
+        //         .catch(res => alert("Cannot find location in database"))
+        // }
+        let locations = (await axios
+            .post("/api/location", {
+                action: "get",
+                payload: 'all',
+            })).data
+        this.setState({
+            locations: locations,
+            columns: [
+                { field: 'locName', headerName: 'Location Name', width: 130, flex: 1 },
+                { field: 'lat', headerName: 'Latitude', width: 130, flex: 1 },
+                { field: 'lon', headerName: 'Longitude', width: 130, flex: 1 }
+            ]
+        })
+
     }
+
+    handleCellClick = e => {
+        document.getElementById('name').value = e.row.locName
+        document.getElementById('latitude').value = e.row.lat
+        document.getElementById('longitude').value = e.row.lon
+        document.getElementById('_id').value = e.row._id
+    }
+
     render() {
         return (
             <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
@@ -242,13 +284,21 @@ class LocCollapse extends React.Component {
 
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">Location</div>
                     <div className="border rounded-b p-2 font-overpass">
-                        <p>Input the location name to apply CRUD operation.</p>
-                        <p>Create, Update: Weather and latitude and longitude will be auto filled from API.</p>
-                        <p>Request: An entry that matches the location name will be returned.</p>
-                        <p>Delete: An entry that matches the location name will be deleted.</p>
+                        <p>First Click the request button, to get all the location data</p>
+                        <p>Click on a specific entry to apply CRUD operation, input field will be auto filled</p>
+                        <p>Edit the name, latitude or longtitude</p>
+                        <p>Click create to create a new location base on the given information</p>
+                        <p>Click update to update the selected entry base on the given information</p>
+                        <p>Click delete to deleted the selected entry</p>
                         <form>
                             <label className="block text-sm font-bold" name="name">Location Name</label>
                             <input className="w-full py-1 border rounded px-1" id="name" type="text" />
+                            <label className="block text-sm font-bold" name="latitude">Latitude</label>
+                            <input className="w-full py-1 border rounded px-1" id="latitude" type="text" />
+                            <label className="block text-sm font-bold" name="longtitude">Longtitude</label>
+                            <input className="w-full py-1 border rounded px-1" id="longitude" type="text" />
+                            <label className="block text-sm font-bold" name="_id">_id</label>
+                            <input className="w-full py-1 border rounded px-1" id="_id" type="text" readonly />
 
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleCreate}>CREATE</button>
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleUpdate}>UPDATE</button>
@@ -256,6 +306,27 @@ class LocCollapse extends React.Component {
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleRequest}>REQUEST</button>
                         </form>
                     </div>
+                </div>
+                <div style={{ height: '700px', width: '100%' }}>
+                    <DataGrid
+                        rows={
+                            this.state.locations
+                                .map((location, idx) => {
+                                    return {
+                                        id: idx, locName: location.locData.name,
+                                        lat: location.locData.latitude,
+                                        lon: location.locData.longitude,
+                                        _id: location._id
+                                    }
+                                }
+                                )
+                        }
+                        columns={this.state.columns}
+                        pageSize={100}
+                        rowsPerPageOptions={[100]}
+                        components={{ Toolbar: GridToolbar }}
+                        onCellClick={this.handleCellClick}
+                    />
                 </div>
             </div>
         );

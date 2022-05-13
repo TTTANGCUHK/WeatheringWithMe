@@ -21,6 +21,7 @@ export default async function handler(req, res) {
   let latitude
   let longitude
   let weatherData
+  let _id
   switch (req.body.action) {
     case 'add':
       payload = JSON.parse(req.body.payload)
@@ -65,9 +66,10 @@ export default async function handler(req, res) {
       latitude = payload.latitude
       longitude = payload.longitude
       weatherData = payload.weatherData
-      if (locationName === undefined || latitude === undefined || longitude === undefined || weatherData === undefined)
+      _id = payload._id
+      if (locationName === undefined || latitude === undefined || longitude === undefined || weatherData === undefined || _id === undefined)
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
-      Location.findOneAndUpdate({ locName: locationName },
+      Location.findOneAndUpdate({ _id: _id },
         {
           locName: locationName,
           locData: {
@@ -80,11 +82,12 @@ export default async function handler(req, res) {
           if (e) return res.status(400).json({ status: 'error', msg: e })
           return res.status(200).json(location)
         })
+
       break
     case 'delete':
       if (req.body.payload === undefined)
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
-      Location.deleteOne({ locName: req.body.payload }, (e, location) => {
+      Location.deleteOne({ _id: req.body.payload }, (e, location) => {
         if (e || location.deletedCount == 0) return res.status(400).json({ status: 'error', msg: 'Failed to delete location' })
         return res.status(200).json(location)
       })
