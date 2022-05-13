@@ -298,7 +298,7 @@ class LocCollapse extends React.Component {
                             <label className="block text-sm font-bold" name="longtitude">Longtitude</label>
                             <input className="w-full py-1 border rounded px-1" id="longitude" type="text" />
                             <label className="block text-sm font-bold" name="_id">_id</label>
-                            <input className="w-full py-1 border rounded px-1" id="_id" type="text" readonly />
+                            <input className="w-full py-1 border rounded px-1" id="_id" type="text" readOnly />
 
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleCreate}>CREATE</button>
                             <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 mx-1" type="submit" onClick={this.handleUpdate}>UPDATE</button>
