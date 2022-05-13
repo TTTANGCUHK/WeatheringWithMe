@@ -10,13 +10,13 @@ export default function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const handleSignOut = () => {
-    signOut({ redirect: false });
-    router.push("/forms/login");
-  };
-
   const redirect = (URL) => {
     router.push(URL);
+  };
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    redirect("/forms/login");
   };
 
   let barColor = "primary";
