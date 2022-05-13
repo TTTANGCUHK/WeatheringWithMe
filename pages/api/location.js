@@ -93,16 +93,16 @@ export default async function handler(req, res) {
       })
       break
     case 'updateAll':
-      Location.find({}, "locData", (e, Locations) => {
+      Location.find({}, "_id locData", (e, Locations) => {
+        console.log("Hello?", Locations)
         Locations.forEach(async loc => {
           function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
           }
           await sleep(1000)
           fetchWeatherAPI({ lat: loc.locData.latitude, lon: loc.locData.longitude }).then(data => {
-            Location.findOneAndUpdate({ locName: data.data.location.name },
+            Location.findOneAndUpdate({ _id: loc._id },
               {
-                locName: data.data.location.name,
                 locData: {
                   name: data.data.location.name,
                   latitude: data.data.location.lat,
@@ -121,8 +121,8 @@ export default async function handler(req, res) {
           )
         })
       })
-      Location.findOne({}, "", (e, x) => {
-        res.status(200).json({ status: 200, msg: x.updatedAt })
+      Location.findOne({}, "", {sort: "-updatedAt"}, (e, x) => {
+        return res.status(200).json({ status: 200, msg: x.updatedAt })
       })
       break
     case 'getIdByName':

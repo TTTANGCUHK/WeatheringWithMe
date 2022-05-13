@@ -111,15 +111,25 @@ class CollapseSession extends React.Component {
 }
 
 class ReqCollapse extends React.Component {
+    state = {
+        btnDisable: false,
+        btnText: "Reload Data",
+    }
 
-    RequestWeatherData() {
-        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(res => document.getElementById('lastUpdate').innerText = "Last updated: " + res.data.msg)
+    RequestWeatherData = () => {
+        this.setState({ btnDisable: true, btnText: "Loading..." })
+        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(res => {
+            document.getElementById('lastUpdate').innerText = "Last updated: " + res.data.msg
+            this.setState({ btnDisable: false, btnText: "Reload Data" })
+        })
     }
 
     render() {
         return (
             <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
-                <button className="bg-sky-600 hover:bg-sky-400 rounded p-1 font-overpass text-white px-2" type="button" onClick={this.RequestWeatherData}>Reload Data</button>
+                <button className="bg-sky-600 hover:bg-sky-400 rounded p-1 font-overpass text-white px-2" type="button" onClick={this.RequestWeatherData} disabled={this.state.btnDisable}>
+                    {this.state.btnText}
+                </button>
                 <div className="text-xs font-overpass mt-0.5" id="lastUpdate">Last updated: </div>
             </div>
         );
@@ -283,11 +293,11 @@ class LocCollapse extends React.Component {
 
                     <div className="rounded-t w-24 bg-sky-600 text-white text-center font-overpass p-1 px-2">Location</div>
                     <div className="border rounded-b p-2 font-overpass">
-                        <p>First Click the request button, to get all the location data</p>
-                        <p>Click on a specific entry to apply CRUD operation, input field will be auto filled</p>
+                        <p>First click the request button to get all the location data</p>
+                        <p>Click on a specific entry to apply CRUD operation, input field will be auto-filled</p>
                         <p>Edit the name, latitude or longtitude</p>
-                        <p>Click create to create a new location base on the given information</p>
-                        <p>Click update to update the selected entry base on the given information</p>
+                        <p>Click create to create a new location based on the given information</p>
+                        <p>Click update to update the selected entry based on the given information</p>
                         <p>Click delete to deleted the selected entry</p>
                         <form>
                             <label className="block text-sm font-bold" name="name">Location Name</label>
@@ -453,15 +463,15 @@ class UserCollapse extends React.Component {
 
                         <div className="border rounded-b p-2 font-overpass">
                             <form>
-                                <p>Create: Create an new user with the given username and password</p>
-                                <p>Update: Update an existing user with the given username and password</p>
+                                <p>Create: Create a new user with the given username and password</p>
+                                <p>Update: Update an existing user's password with the given username</p>
                                 <label className="block text-sm font-bold" name="name">Username</label>
                                 <input className="w-full py-1 border rounded px-1 mb-0.5" id="name" type="text" />
                                 <label className="block text-sm font-bold" name="password">Password</label>
                                 <input className="w-full py-1 border rounded px-1" id="password" type="text" />
 
                                 <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleCreate}>CREATE</button>
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleUpdate}>UPDATE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 ml-2" type="submit" onClick={this.handleUpdate}>UPDATE</button>
                             </form>
                         </div>
 
@@ -473,12 +483,12 @@ class UserCollapse extends React.Component {
                         <div className="border rounded-b p-2 font-overpass">
                             <form>
                                 <p>Retrieve: Retrieve an existing user's username, password and salt</p>
-                                <p>Delete: Delete an existing user</p>
+                                <p>Delete: Delete an existing user with the given username</p>
                                 <label className="block text-sm font-bold" name="name">Username</label>
                                 <input className="w-full py-1 border rounded px-1" id="name" type="text" />
 
                                 <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-3 text-white text-center font-overpass mt-2 mb-5" type="submit" onClick={this.handleRetrieve}>RETRIEVE</button>
-                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2" type="submit" onClick={this.handleDelete}>DELETE</button>
+                                <button className="rounded bg-sky-600 hover:bg-sky-400 py-1 px-5 text-white text-center font-overpass mt-2 ml-2" type="submit" onClick={this.handleDelete}>DELETE</button>
                             </form>
                         </div>
                     </div>
