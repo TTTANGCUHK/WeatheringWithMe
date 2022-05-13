@@ -117,6 +117,7 @@ function LocationPage() {
             </tr>
           </tbody>
         </table>
+        <p>Last updated: {location.updatedAt}</p>
       </div>
       <button />
     </>

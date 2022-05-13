@@ -63,7 +63,7 @@ export default async function handler(req, res) {
         })
       }
       else {
-        Location.findById(req.body.payload, "locData weatherData", (e, location) => {
+        Location.findById(req.body.payload, "locData weatherData updatedAt", (e, location) => {
           if (e) return res.status(400).json({ status: 'error', msg: e })
           return res.status(200).json(location)
         })
