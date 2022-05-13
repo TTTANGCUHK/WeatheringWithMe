@@ -50,10 +50,10 @@ function HomePage() {
 
   // HTML + JS section
   return (
-    <>
+    <div className="grid grid-rows-2 grid-flow-row-dense auto-rows-min">
       <Map locations={locations} />
       <Table locations={locations} />
-    </>
+    </div>
   );
 }
 
