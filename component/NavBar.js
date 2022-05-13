@@ -10,6 +10,11 @@ export default function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const handleSignOut = () => {
+    signOut({ redirect: false });
+    router.push("/forms/login");
+  };
+
   const redirect = (URL) => {
     router.push(URL);
   };
@@ -33,7 +38,7 @@ export default function NavBar() {
     userBtns = (
       <>
         <Typography variant="h6">{session.user.username}</Typography>
-        <Button color="inherit" onClick={() => signOut({ callbackUrl: "/forms/login" })}>Logout</Button>
+        <Button color="inherit" onClick={handleSignOut}>Logout</Button>
       </>
     );
     if (session.user.isAdmin) {
