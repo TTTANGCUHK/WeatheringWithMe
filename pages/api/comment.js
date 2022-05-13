@@ -13,12 +13,13 @@ export default async function handler(req, res) {
   if (err = APICHECK.PARAMS_REQUIRE(req, ['action', 'payload']), err)
     return res.status(err.httpStatus).json(err.apiRes)
 
-  connectToMongoDB()
+  await connectToMongoDB()
   const db = mongoose.connection
   const Location = locModel
+  console.log(req.body.payload)
   switch (req.body.action) {
     case 'add':
-      const { locName, uid, body } = JSON.parse(req.body.payload);
+      const { locName, uid, body } = req.body.payload;
       if ([locName, uid, body].includes(undefined) || [locName, uid, body].includes(null) || body.length === 0)
         return res.status(400).json({ status: 'error', msg: 'Payload data contains empty field' })
       Location.findOneAndUpdate(

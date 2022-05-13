@@ -17,8 +17,8 @@ export default NextAuth({
             id: "credentials",
             name: "credentials",
             credentials: {
-                username: {label: "Username", type: "text", placeholder: "username"},
-                password: {label: "Password", type: "password"},
+                username: { label: "Username", type: "text", placeholder: "username" },
+                password: { label: "Password", type: "password" },
             },
             authorize: async (credentials) => {
 
@@ -26,7 +26,7 @@ export default NextAuth({
                 const db = await mongoose.connection
                 const User = await userModel
 
-                const result = await User.findOne({username: credentials.username})
+                const result = await User.findOne({ username: credentials.username })
 
                 if (!result) {
                     await db.close()
@@ -44,7 +44,7 @@ export default NextAuth({
 
                 console.log(result)
                 await db.close()
-                return { username: result.username, isAdmin: result.isAdmin }
+                return { username: result.username, isAdmin: result.isAdmin, uid: result._id }
 
             }
         })
@@ -55,7 +55,7 @@ export default NextAuth({
     },
 
     callbacks: {
-        async signIn({ user}) {
+        async signIn({ user }) {
             console.log(user)
             if (user.isAdmin) {
                 return true
@@ -65,14 +65,14 @@ export default NextAuth({
                 return true
         },
 
-        async session({ session, token, user}) {
+        async session({ session, token, user }) {
             session.accessToken = token.accessToken
             session.user.uid = token.uid
             session.user.username = token.username
             session.user.isAdmin = token.isAdmin
             return session
         },
-        async jwt({token, user}) {
+        async jwt({ token, user }) {
             if (user) {
                 token.accessToken = user.access_token
                 token.uid = user.uid

@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 import fetchWeatherAPI from "../../backend/dataFetch/fetchAPI";
+import CommentBox from "../../component/CommentBox";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 function LocationPage() {
   const router = useRouter();
   const { locationid } = router.query;
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/form");
+    },
+  });
 
   const [libraries] = useState(["places"]);
   const [location, setLocation] = useState(null);
@@ -58,7 +69,7 @@ function LocationPage() {
   });
 
   const mapContainerStyle = {
-    width: "70%",
+    width: "100%",
     height: "700px",
   };
 
@@ -75,56 +86,59 @@ function LocationPage() {
   if (loadError) return "";
   if (!isLoaded) return "";
 
-  if (loading) return <div></div>;
+  if (loading || !session.user) return <div></div>;
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center">
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          zoom={7}
-          center={center}
-          options={options}
-        >
-          <Marker
-            key={location._id}
-            position={{
-              lat: location.locData.latitude,
-              lng: location.locData.longitude,
-            }}
-          />
-        </GoogleMap>
+      <div className="grid grid-cols-10 grid-row-1">
+        <div className="col-span-7">
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={7}
+            center={center}
+            options={options}
+          >
+            <Marker
+              key={location._id}
+              position={{
+                lat: location.locData.latitude,
+                lng: location.locData.longitude,
+              }}
+            />
+          </GoogleMap>
+        </div>
+        <div className="col-span-3">
+          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <ListItem>
+              <ListItemText primary="Location" secondary={location.locData.name} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Temperature (C)" secondary={weather.temp_c} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Wind Speed (km/h)" secondary={weather.wind_kph} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Wind Direction" secondary={weather.wind_dir} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Humidity (%)" secondary={weather.humidity} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Precipitation (mm)" secondary={weather.precip_mm} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Visibility (km)" secondary={weather.vis_km} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Last updated" secondary={location.updatedAt} />
+            </ListItem>
+          </List>
+        </div>
       </div>
-      <br />
-      <h1 className="text-center">{location.locData.name}</h1>
-      <br />
-      <div className="w-full">
-        <table className="table-auto w-full ">
-          <thead>
-            <tr>
-              <th>Temperature</th>
-              <th>wind_kph</th>
-              <th>wind_dir</th>
-              <th>humidity</th>
-              <th>precip_mm</th>
-              <th>vis_km</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr key={location._id}>
-              <td className="text-center">{weather.temp_c}</td>
-              <td className="text-center">{weather.wind_kph}</td>
-              <td className="text-center">{weather.wind_dir}</td>
-              <td className="text-center">{weather.humidity}</td>
-              <td className="text-center">{weather.precip_mm}</td>
-              <td className="text-center">{weather.vis_km}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p>Last updated: {location.updatedAt}</p>
+      <div sx={{ maxHeight: '500px', overflow: 'auto' }}>
+        <CommentBox locName={location.locData.name} uid={session.user.uid} />
       </div>
-      <br />
       <a href="../..">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
           Back to home page
