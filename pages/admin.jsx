@@ -112,14 +112,14 @@ class CollapseSession extends React.Component {
 class ReqCollapse extends React.Component {
 
     RequestWeatherData() {
-        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(res => alert(res.data.msg))
+        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(res => document.getElementById('lastUpdate').innerText = "Last updated: " + res.data.msg)
     }
 
     render() {
         return (
             <div className="rounded w-full p-2 border-2 border-indigo-100 mt-2 mb-5">
                 <button className="bg-sky-600 hover:bg-sky-400 rounded p-1 font-overpass text-white px-2" type="button" onClick={this.RequestWeatherData}>Reload Data</button>
-                <div className="text-xs font-overpass mt-0.5">Last updated: </div>
+                <div className="text-xs font-overpass mt-0.5" id="lastUpdate">Last updated: </div>
             </div>
         );
     }
