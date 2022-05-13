@@ -3,8 +3,25 @@ import Link from "next/link";
 import Table from "../component/Table.js";
 import Map from "../component/Map.js";
 import axios from "axios";
+import {useSession} from "next-auth/react";
+import Router from "next/router";
 
 function HomePage() {
+
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      Router.push('/form')
+    },
+  })
+  if (session.user.isAdmin)
+    Router.push('/admin')
+
+  if (status === "loading") {
+    return <h2>Loading...</h2>
+  }
+
+
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {

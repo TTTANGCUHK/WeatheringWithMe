@@ -3,6 +3,7 @@ import { Collapse } from "react-collapse";
 import Router from "next/router";
 import axios from 'axios';
 import fetchWeatherAPI from '../backend/dataFetch/fetchAPI';
+import {signOut} from "next-auth/react";
 
 
 class AdminHome extends React.Component {
@@ -24,7 +25,7 @@ class AdminHome extends React.Component {
 
     handleLogout = () => {
         if (typeof window !== 'undefined') {
-            Router.push('/form')
+            signOut({callbackUrl: 'http://localhost:3000/form'})
         }
     }
 
