@@ -31,6 +31,7 @@ export default function NavBar() {
       </>
     );
     if (session.user.isAdmin) {
+      barColor = "secondary";
       pageBtns = (
         <>
           <Button color="inherit" href="/">Home</Button>

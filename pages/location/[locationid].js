@@ -18,7 +18,7 @@ function LocationPage() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/form");
+      router.push("/forms/login");
     },
   });
 

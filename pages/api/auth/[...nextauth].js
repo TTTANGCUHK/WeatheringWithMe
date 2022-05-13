@@ -30,14 +30,12 @@ export default NextAuth({
 
                 if (!result) {
                     await db.close()
-                    console.log("SHIT")
                     return null
                 }
 
                 const checkPw = await APICRYPTO.CRYPTO_PW(credentials.password, result.salt) === result.password
 
                 if (!checkPw) {
-                    console.log("FUCK")
                     await db.close()
                     return null
                 }

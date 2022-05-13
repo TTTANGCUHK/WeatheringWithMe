@@ -10,7 +10,7 @@ function HomePage() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/form");
+      router.push("/forms/login");
     },
   });
 

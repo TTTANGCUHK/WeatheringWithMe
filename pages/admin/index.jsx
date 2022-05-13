@@ -24,11 +24,11 @@ class AdminHome extends React.Component {
         this.UserElement.current.handleMenuClick();
     };
 
-    handleLogout = () => {
-        if (typeof window !== 'undefined') {
-            signOut({ callbackUrl: 'http://localhost:3000/form' })
-        }
-    }
+    // handleLogout = () => {
+    //     if (typeof window !== 'undefined') {
+    //         signOut({ callbackUrl: 'http://localhost:3000/form' })
+    //     }
+    // }
 
     render() {
         return (
@@ -36,12 +36,11 @@ class AdminHome extends React.Component {
             <div className="w-full min-h-screen bg-fixed bg-[url('../public/ss-scaled-2048x1152.jpg')]">
                 <div className="flex flex-row h-full min-h-screen opacity-90">
                     <div className="flex-none basis-3/12 bg-white rounded m-5 h-fit sticky top-0">
-                        <div className="grid grid-rows-4 gap-3 m-3 h-full font-overpass font-bold text-md">
+                        <div className="grid grid-rows-3 gap-3 m-3 h-full font-overpass font-bold text-md">
 
                             <div onClick={this.handleClickR}><Menu name="Request Updated Data" anchor="#req" /></div>
                             <div onClick={this.handleClickL}><Menu name="Location Data" anchor="#loc" /></div>
                             <div onClick={this.handleClickU}><Menu name="User Data" anchor="#user" /></div>
-                            {/* <div onClick={this.handleLogout}><Menu name="Log Out" anchor="#" /></div> */}
 
                         </div>
                     </div>

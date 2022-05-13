@@ -8,13 +8,13 @@ import { Typography } from "@mui/material";
 export default function favorite() {
   const [favLoc, setFavLoc] = useState([])
   const [locations, setLocations] = useState([]);
+  const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/form");
+      router.push("/forms/login");
     },
   });
-  const router = useRouter();
   const columns = [
     { field: 'locName', headerName: 'Location Name', width: 130, flex: 1 },
     { field: 'lat', headerName: 'Latitude', width: 130, flex: 1 },
