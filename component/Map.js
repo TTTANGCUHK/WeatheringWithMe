@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 function Map({locations}) {
   const router = useRouter()
   const [libraries] = useState(["places"]);
   const { isLoaded, loadError } = useLoadScript({
-      googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY,
+      googleMapsApiKey:"AIzaSyAw6wxQHqtInbxZz-O6kdq0JOs_DGNkAA4",
       libraries,
   });
 
   const mapContainerStyle = {
-      width: "100%",
+      width: "70%",
       height: "700px",
     };
     
@@ -38,9 +38,9 @@ function Map({locations}) {
       {
         locations.map((location, index) => (
           <Marker
-            key={location.lid}
-            position={ {lat: location.locationData.latitude, lng: location.locationData.longitude }}
-            onClick={() => {router.push("/location/" + location.lid)}}
+            key={location._id}
+            position={ {lat: location.locData.latitude, lng: location.locData.longitude }}
+            onClick={() => {router.push("/location/" + location._id)}}
           />
         ))
       }
