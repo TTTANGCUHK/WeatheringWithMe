@@ -95,7 +95,7 @@ function LocationPage() {
       </GoogleMap>
       <h1>{location.locData.name}</h1>
       <div className="w-full">
-        <table className="table-auto w-full">
+        <table className="table-auto w-full ">
           <thead>
             <tr>
               <th>Temperature</th>
@@ -108,12 +108,12 @@ function LocationPage() {
           </thead>
           <tbody>
             <tr key={location._id}>
-              <td> {weather.temp_c} </td>
-              <td>{weather.wind_kph}</td>
-              <td>{weather.wind_dir}</td>
-              <td>{weather.humidity}</td>
-              <td>{weather.precip_mm}</td>
-              <td>{weather.vis_km}</td>
+              <td className="text-center"> {weather.temp_c} </td>
+              <td className="text-center">{weather.wind_kph}</td>
+              <td className="text-center">{weather.wind_dir}</td>
+              <td className="text-center">{weather.humidity}</td>
+              <td className="text-center">{weather.precip_mm}</td>
+              <td className="text-center">{weather.vis_km}</td>
             </tr>
           </tbody>
         </table>
