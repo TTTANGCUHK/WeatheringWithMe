@@ -19,45 +19,13 @@ const loginPage = () => {
             password: event.target.password.value
         }
         const result = await signIn("credentials", {redirect: false, username: data.username, password: data.password})
-        console.log("RE: " + result.uesrname)
+        console.log("RE: " + result)
         if (result?.ok) {
             alert("OK")
-            // await Router.push('/')
+            await Router.push('/')
         } else {
             alert("Wrong username or password")
         }
-        // else {
-        //     alert("NOT OK")
-        // }
-        // const postTo = "../api/user/loginUser"
-        // const opts = {
-        //     method: 'POST',
-        //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        //     mode: 'cors',
-        //     body: new URLSearchParams(data)
-        // }
-        //
-        // const res = await fetch(postTo, opts)
-        // const result = await res.json()
-        // if (result.status === "200") {
-        //     alert("You login your account successfully!")
-        //     if (result.msg === "Admin Login") {
-        //         if (typeof window !== 'undefined') {
-        //             await Router.push('/admin')
-        //         }
-        //     } else if (result.msg === "User Login") {
-        //         if (typeof window !== 'undefined') {
-        //             await Router.push('/')
-        //         }
-        //     }
-        //
-        //     // else if (result.msg === "User updated") {
-        //     //     alert("PW updated")
-        //     // }
-        //
-        // } else if (result.status === "403" || result.status === "404") {
-        //     alert("Wrong username or password!")
-        // }
     }
 
     return (

@@ -58,19 +58,26 @@ export default NextAuth({
         async signIn({ user}) {
             console.log(user)
             if (user.isAdmin) {
+                return true
                 // await Router.push('/admin')
             }
             else
                 return true
         },
 
-        async session({ session, token}) {
+        async session({ session, token, user}) {
             session.accessToken = token.accessToken
+            session.user.uid = token.uid
+            session.user.username = token.username
+            session.user.isAdmin = token.isAdmin
             return session
         },
         async jwt({token, user}) {
             if (user) {
                 token.accessToken = user.access_token
+                token.uid = user.uid
+                token.username = user.username
+                token.isAdmin = user.isAdmin
             }
 
             return token

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Collapse } from "react-collapse";
 import Router from "next/router";
+import {useSession} from "next-auth/react";
+import { signOut } from "next-auth/react"
 
 
 class AdminHome extends React.Component {
@@ -9,7 +11,9 @@ class AdminHome extends React.Component {
         this.ReqElement = React.createRef();
         this.LocElement = React.createRef();
         this.UserElement = React.createRef();
+
     }
+
     handleClickR = () => {
         this.ReqElement.current.handleMenuClick();
     };
@@ -22,11 +26,12 @@ class AdminHome extends React.Component {
 
     handleLogout = () => {
         if (typeof window !== 'undefined') {
-            Router.push('/form')
+            signOut({callbackUrl: 'http://localhost:3000/form'})
         }
     }
 
   render() {
+
     return (
 
         <div className="w-screen h-full min-h-screen bg-fixed bg-[url('../public/ss-scaled-2048x1152.jpg')]">                

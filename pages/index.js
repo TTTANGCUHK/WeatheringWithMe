@@ -115,12 +115,14 @@ const hardcodedData = [
 
 function HomePage() {
 
-  const { status } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       Router.push('/form')
     },
   })
+  if (session.user.isAdmin)
+    Router.push('/admin')
 
   if (status === "loading") {
     return <h2>Loading...</h2>
