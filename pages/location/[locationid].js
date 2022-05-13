@@ -179,11 +179,11 @@ function LocationPage() {
       <div sx={{ maxHeight: '500px', overflow: 'auto' }}>
         <CommentBox locName={location.locData.name} uid={session.user.uid} />
       </div>
-      <a href="../..">
+      {/* <a href="../..">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
           Back to home page
         </button>
-      </a>
+      </a> */}
     </>
   );
 }

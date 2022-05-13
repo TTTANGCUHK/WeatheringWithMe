@@ -1,4 +1,4 @@
-import Container from '../../component/FormContainer'
+import Container from '../form'
 import RStar from '../../utils/required'
 import { useState } from "react";
 import Router from "next/router";

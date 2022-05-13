@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Login from "../pages/forms/login";
+import Login from "./forms/login";
 
 const FormContainer = ({children}) => {
 

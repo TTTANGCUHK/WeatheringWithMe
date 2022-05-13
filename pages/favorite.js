@@ -68,7 +68,7 @@ export default function favorite() {
 
   return (
     <>
-      <Typography variant="h3">Your Favorite Locations</Typography>
+      <Typography variant="h5" sx={{ my: 3, ml: 1 }}>Your Favorite Locations</Typography>
       <div style={{ height: '700px', width: '100%' }}>
         <DataGrid
           rows={
