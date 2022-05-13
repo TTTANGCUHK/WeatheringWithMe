@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Login from "./forms/login";
+import Login from "../pages/forms/login";
 
 const FormContainer = ({children}) => {
 
@@ -8,7 +8,7 @@ const FormContainer = ({children}) => {
         return (
             <div className="grid h-screen place-item-center bg-[url('../public/ss-scaled-2048x1152.jpg')]">
                 <React.Fragment>
-                    <Login/>
+                    <Login />
                 </React.Fragment>
             </div>
         );

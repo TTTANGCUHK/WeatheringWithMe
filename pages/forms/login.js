@@ -1,4 +1,4 @@
-import Container from '../form'
+import Container from '../../component/FormContainer'
 import RStar from '../../utils/required'
 import {useState} from "react";
 import Router from "next/router";
@@ -18,11 +18,9 @@ const loginPage = () => {
             username: event.target.username.value.trim(),
             password: event.target.password.value
         }
-        const result = await signIn("credentials", {redirect: false, username: data.username, password: data.password})
+        const result = await signIn("credentials", { username: data.username, password: data.password })
         if (result?.ok) {
-            alert("OK")
-            
-            await Router.push('/')
+            alert("Login successfully")
         } else {
             alert("Wrong username or password")
         }
