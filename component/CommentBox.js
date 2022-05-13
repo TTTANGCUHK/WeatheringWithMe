@@ -1,29 +1,22 @@
 import { useState, useEffect } from "react"
-import { Card, CardContent, Typography, TextField, FormControl, Button } from '@mui/material'
+import { Card, CardContent, Typography, TextField, FormControl, Button, Container } from '@mui/material'
 import axios from "axios"
 
 export default function CommentBox({ locName, uid }) {
   const [comments, setComments] = useState([])
   const [reload, setReload] = useState(0)
-  const [usernames, setUsernames] = useState([])
   useEffect(() => {
-    axios.post('/api/comment', { action: 'get', payload: locName }).then(res => {
-      console.log(res.data.comments)
-      setComments(res.data.comments)
-    })
+    const fetchData = async() => {
+      const res = await axios.post('/api/comment', { action: 'get', payload: locName })
+      const fullComments = []
+      for (const com of res.data.comments) {
+        const resName = await axios.post('/api/user/retrieveName', { uid: com.uid })
+        fullComments.push({ ...com, username: resName.data.username })
+      }
+      setComments(fullComments)
+    }
+    fetchData()
   }, [locName, reload])
-
-  useEffect(() => {
-    setUsernames(comments.map((comment) => {
-      let username
-      getNameById(comment.uid).then(username => username)
-    }))
-    console.log(comments.map((comment) => {
-      let username
-      getNameById(comment.uid).then(name => username = name)
-      return username
-    }))
-  }, [comments])
 
   function handleComment(e) {
     e.preventDefault()
@@ -41,19 +34,14 @@ export default function CommentBox({ locName, uid }) {
     }
   }
 
-  async function getNameById(uid) {
-    let res = await axios.post('/api/user/retrieveName', { uid: uid })
-    return res.data.msg.username
-  }
-
   return (
     <div>
       {comments.map((comment, idx) => {
         return (
           <Card variant="outlined" key={idx}>
             <CardContent>
-              <Typography variant="body">
-                {usernames[idx]}
+              <Typography variant="h6">
+                {comment.username}
               </Typography>
               <Typography variant="body">
                 {comment.body}
@@ -65,9 +53,9 @@ export default function CommentBox({ locName, uid }) {
           </Card>
         )
       })}
-      <FormControl fullWidth variant="standard">
+      <FormControl fullWidth variant="standard" sx={{ my: 2, p: 2 }}>
         <TextField id="commentBox" label="Comment about this place!" variant="outlined" />
-        <Button variant="contained" onClick={handleComment}>Comment!</Button>
+        <Button variant="outlined" color="primary" sx={{ my: 2 }}onClick={handleComment}>Comment!</Button>
       </FormControl>
     </div>
   )

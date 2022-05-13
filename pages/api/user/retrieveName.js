@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const username = user.username
     const userPW = user.password
     const userSALT = user.salt
-    return res.status(200).json({ status: '200', msg: { username: username } })
+    return res.status(200).json({ username: username })
 
   });
 
