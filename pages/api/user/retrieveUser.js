@@ -18,14 +18,15 @@ export default async function handler(req, res) {
     if (username === undefined)
         return res.status(400).json({ status: 'error', msg: 'Some field is empty' })
 
-    User.findOne({username: username}, (err, user) =>{
+    User.findOne({ username: username }, (err, user) => {
         if (err) return res.status(400).json({ status: 'error', msg: err })
 
         if (user == null) {
             return res.status(404).json({ status: '404', msg: 'Username does not exist' })
         }
         const userPW = user.password
-        return res.status(200).json({ status: '200', msg: userPW })
+        const userSALT = user.salt
+        return res.status(200).json({ status: '200', msg: { userPW: userPW, userSALT: userSALT } })
 
     });
 
