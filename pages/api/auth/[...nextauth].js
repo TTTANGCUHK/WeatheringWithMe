@@ -44,27 +44,17 @@ export default NextAuth({
 
                 console.log(result)
                 await db.close()
-                return { username: result.username, isAdmin: result.isAdmin, uid: result._id }
+                return { uid: result._id, username: result.username, isAdmin: result.isAdmin }
 
             }
         })
     ],
 
     pages: {
-        signIn: '/form/login',
+        signIn: '/forms/login',
     },
 
     callbacks: {
-        async signIn({ user }) {
-            console.log(user)
-            if (user.isAdmin) {
-                return true
-                // await Router.push('/admin')
-            }
-            else
-                return true
-        },
-
         async session({ session, token, user }) {
             session.accessToken = token.accessToken
             session.user.uid = token.uid
