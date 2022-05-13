@@ -33,7 +33,7 @@ export default function NavBar() {
     userBtns = (
       <>
         <Typography variant="h6">{session.user.username}</Typography>
-        <Button color="inherit" onClick={() => signOut()}>Logout</Button>
+        <Button color="inherit" onClick={() => signOut({ callbackUrl: "/forms/login" })}>Logout</Button>
       </>
     );
     if (session.user.isAdmin) {
