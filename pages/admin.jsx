@@ -1,9 +1,6 @@
 import React from 'react';
 import { Collapse } from "react-collapse";
-import Router from "next/router";
-import {useSession} from "next-auth/react";
 import { signOut } from "next-auth/react"
-
 
 class AdminHome extends React.Component {
     constructor(props) {
@@ -11,7 +8,6 @@ class AdminHome extends React.Component {
         this.ReqElement = React.createRef();
         this.LocElement = React.createRef();
         this.UserElement = React.createRef();
-
     }
 
     handleClickR = () => {
