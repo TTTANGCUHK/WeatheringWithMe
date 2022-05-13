@@ -128,6 +128,8 @@ export default async function handler(req, res) {
           )
         })
       })
-      res.status(200).json({ status: 200, msg: 'Data updated' })
+      Location.findOne({}, "", (e, x) => {
+        res.status(200).json({ status: 200, msg: x.updatedAt })
+      })
   }
 }

@@ -111,7 +111,7 @@ class CollapseSession extends React.Component {
 class ReqCollapse extends React.Component {
 
     RequestWeatherData() {
-        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(alert('Updated!'))
+        axios.post("/api/location", { action: 'updateAll', payload: ' ' }).then(res => alert(res.data.msg))
     }
 
     render() {
