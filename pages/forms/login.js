@@ -21,7 +21,7 @@ const loginPage = () => {
         const result = await signIn("credentials", { redirect: false, username: data.username, password: data.password })
         console.log("login result", result)
         if (result?.ok) {
-            router.push("/forms/signup")
+            await router.push("/admin")
             alert("Login successfully")
         } else {
             alert("Wrong username or password")
