@@ -76,7 +76,7 @@ export default function favorite() {
               .filter(inFav)
               .map((location, idx) => {
                 return {
-                  id: idx, locName: location.locData.name,
+                  id: idx, locName: location.locName,
                   lat: location.locData.latitude,
                   lon: location.locData.longitude,
                   _id: location._id

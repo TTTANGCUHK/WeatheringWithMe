@@ -119,7 +119,7 @@ function Table({ locations }) {
         <DataGrid
           rows={
             locations
-              .map((location, idx) => { return { id: idx, locName: location.locData.name, lat: location.locData.latitude, lon: location.locData.longitude, _id: location._id } }
+              .map((location, idx) => { return { id: idx, locName: location.locName, lat: location.locData.latitude, lon: location.locData.longitude, _id: location._id } }
               )
           }
           columns={columns}

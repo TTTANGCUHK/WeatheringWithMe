@@ -146,7 +146,7 @@ function LocationPage() {
         <div className="col-span-3">
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <ListItem>
-              <ListItemText primary="Location" secondary={location.locData.name} />
+              <ListItemText primary="Location" secondary={location.locName} />
             </ListItem>
             <ListItem>
               <ListItemText primary="Temperature (C)" secondary={weather.temp_c} />
@@ -177,7 +177,7 @@ function LocationPage() {
         </div>
       </div>
       <div sx={{ maxHeight: '500px', overflow: 'auto' }}>
-        <CommentBox locName={location.locData.name} uid={session.user.uid} />
+        <CommentBox locName={location.locName} uid={session.user.uid} />
       </div>
       {/* <a href="../..">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
