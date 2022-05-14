@@ -1,5 +1,5 @@
 import Container from '../form'
-import RStar from '../../utils/required'
+import RStar from '../api/required'
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
