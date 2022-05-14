@@ -212,8 +212,8 @@ class LocCollapse extends React.Component {
                     action: "update",
                     payload: JSON.stringify({
                         "locationName": name,
-                        "latitude": lon,
-                        "longitude": lat,
+                        "latitude": lat,
+                        "longitude": lon,
                         "weatherData": {
                             "temp_c": data.data.current.temp_c,
                             "wind_kph": data.data.current.wind_kph,
@@ -322,7 +322,7 @@ class LocCollapse extends React.Component {
                             this.state.locations
                                 .map((location, idx) => {
                                     return {
-                                        id: idx, locName: location.locData.name,
+                                        id: idx, locName: location.locName,
                                         lat: location.locData.latitude,
                                         lon: location.locData.longitude,
                                         _id: location._id

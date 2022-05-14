@@ -47,14 +47,14 @@ export default async function handler(req, res) {
       break
     case 'get':
       if (req.body.payload === 'all') {
-        Location.find({}, "locData weatherData", (e, locations) => {
+        Location.find({}, "locName locData weatherData", (e, locations) => {
           console.log(e, locations)
           if (e) return res.status(400).json({ status: 'error', msg: e })
           return res.status(200).json(locations)
         })
       }
       else {
-        Location.findById(req.body.payload, "locData weatherData updatedAt", (e, location) => {
+        Location.findById(req.body.payload, "locName locData weatherData updatedAt", (e, location) => {
           if (e) return res.status(400).json({ status: 'error', msg: e })
           return res.status(200).json(location)
         })
@@ -94,7 +94,6 @@ export default async function handler(req, res) {
       break
     case 'updateAll':
       Location.find({}, "_id locData", (e, Locations) => {
-        console.log("Hello?", Locations)
         Locations.forEach(async loc => {
           function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
@@ -116,7 +115,7 @@ export default async function handler(req, res) {
                   "precip_mm": data.data.current.precip_mm,
                   "vis_km": data.data.current.vis_km
                 }
-              })
+              }).then()
           }
           )
         })
